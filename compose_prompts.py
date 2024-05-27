@@ -17,13 +17,16 @@ class query_document_pair:
         return f'qid_{self.qid}: {self.qText}; docno_{self.docno}; qrel: {self.qrel}; bm25_rsv: {self.rsv}.'
 
 def get_msmarco_passage_pairs():
+    get_msmarco_passage_pairs('msmarco_passage')
+
+def get_msmarco_passage_pairs(dataset: str):
     dl_19_res_df = pd.read_csv('./res/bm25_dl_19.csv')
     dl_20_res_df = pd.read_csv('./res/bm25_dl_20.csv')
 
     dl_19_qids = dl_19_res_df.qid.unique()
     dl_20_qids = dl_20_res_df.qid.unique()
 
-    with open('./middle_products/msmarco_passage.pkl', 'rb') as f:
+    with open(f'./middle_products/{dataset}.pkl', 'rb') as f:
         import pickle
         msmarco_doc_dict = pickle.load(f)
         f.close()
