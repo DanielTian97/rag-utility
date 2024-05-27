@@ -11,7 +11,7 @@ llm = Llama(
 
 examples = 'Oak is a species of tree. Egg is not a species of tree.'
 
-question = 'Is beef a species of tree?'
+question = 'Is birch a species of tree?'
 
 prompt = f"Examples: {examples} \nQuestion: {question} Answer Yes or No. \nAnswer: "
 # prompt = f"Examples: {examples} \nQuestion: {question} Answer Yes or No, and then summarise your reason. \nAnswer: "
@@ -21,7 +21,7 @@ output = llm(
       prompt, # Prompt
       max_tokens=1, # Generate up to 32 tokens, set to None to generate up to the end of the context window
       stop=[" Yes", " No", "Yes", "No"], # Stop generating just before the model would generate a new question
-      echo=True, # Echo the prompt back in the output
+      echo=False, # Echo the prompt back in the output
       logprobs=60000,
       temperature=0,
 ) # Generate a completion, can also call create_completion

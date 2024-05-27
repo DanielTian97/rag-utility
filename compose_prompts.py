@@ -8,6 +8,10 @@ class query_document_pair:
         self.dText = dText
         self.qrel = qrel
         self.rsv = score
+        self.pred = None
+
+    def put_prediction(self, pred: float):
+        self.pred = pred
     
     def __str__(self) -> str:
         return f'qid_{self.qid}: {self.qText}; docno_{self.docno}; qrel: {self.qrel}; bm25_rsv: {self.rsv}.'
@@ -35,7 +39,7 @@ def get_msmarco_passage_pairs():
         df_for_qid = dl_19_res_df[dl_19_res_df.qid == qid].sort_values(['rank'], ascending=True)
         denoted_docnos = qrels[qrels.qid == qid].docno.tolist()
         
-        for docno, score in df_for_qid[['docno', 'score']].values:
+        for docno, score in df_for_qid[['docno', 'score']].values[:50]:
             docno=str(int(docno))
             dText = msmarco_doc_dict[docno]
             
