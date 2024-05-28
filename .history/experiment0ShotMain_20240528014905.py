@@ -83,11 +83,11 @@ def making_predictions(llm, q_d_pair_list):
             q_d_pair_list[i].put_prediction(pred)
       return q_d_pair_list
 
-def save_results(q_d_pair_list, dataset):            
+def save_results(q_d_pair_list):            
       print('save results')
       import pickle
 
-      with open(f'prediction_record_{dataset}.pkl', 'wb') as f:
+      with open('prediction_record.pkl', 'wb') as f:
             pickle.dump(q_d_pair_list, f)
 
 def experiment(dataset: str):
