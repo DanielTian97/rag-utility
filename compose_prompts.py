@@ -46,6 +46,7 @@ def get_msmarco_passage_pairs(dataset: str):
         qText = queries[queries.qid==qid]['query'].tolist()[0]
         df_for_qid = dl_p1_res_df[dl_p1_res_df.qid == qid].sort_values(['rank'], ascending=True)
         denoted_docnos = qrels[qrels.qid == qid].docno.tolist()
+        print(df_for_qid.shape)
         
         for docno, score in df_for_qid[['docno', 'score']].values[:100]:
             if('v2' not in dataset):
