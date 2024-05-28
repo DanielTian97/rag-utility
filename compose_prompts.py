@@ -40,9 +40,6 @@ def get_msmarco_passage_pairs(dataset: str):
         import pickle
         msmarco_doc_dict = pickle.load(f)
         f.close()
-        
-    for key in list(msmarco_doc_dict.keys())[:5]:
-        print(key)
 
     q_d_pair_list = []
     for qid in dl_p1_qids:
@@ -50,7 +47,7 @@ def get_msmarco_passage_pairs(dataset: str):
         df_for_qid = dl_p1_res_df[dl_p1_res_df.qid == qid].sort_values(['rank'], ascending=True)
         denoted_docnos = qrels[qrels.qid == qid].docno.tolist()
         
-        for docno, score in df_for_qid[['docno', 'score']].values[:50]:
+        for docno, score in df_for_qid[['docno', 'score']].values[:100]:
             if('v2' not in dataset):
                 docno=str(int(docno))
             dText = msmarco_doc_dict[docno]
