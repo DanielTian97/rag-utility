@@ -31,15 +31,15 @@ def per_query_analysis(qrel_book, predq_book, rsv_book, queries_0, queries_1):
             gt_list.append(gt[metric])
             ps_list.append(ps[metric])
             
-            if(str(qid) in queries_0):
+            if(qid in queries_0):
                 gt_list_0.append(gt[metric])
                 ps_list_0.append(ps[metric])
-            elif(str(qid) in queries_1):
+            elif(qid in queries_1):
                 gt_list_1.append(gt[metric])
                 ps_list_1.append(ps[metric])
                 
-        print(f'{name_mapping[metric]}:',
-              f'\t{stats.kendalltau(gt_list_0, ps_list_0)[0]}',
-              f'\t{stats.kendalltau(gt_list_1, ps_list_1)[0]}',
-              f'\t{stats.kendalltau(gt_list, ps_list)[0]}')
+        print(f'{name_mapping[metric]}:\t \\
+              {stats.kendalltau(gt_list_0, ps_list_0)[0]}\t \\
+              {stats.kendalltau(gt_list_1, ps_list_1)[0]}\t \\
+              {stats.kendalltau(gt_list, ps_list)[0]}')
     

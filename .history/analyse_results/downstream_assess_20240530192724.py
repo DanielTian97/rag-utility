@@ -2,6 +2,7 @@ import pytrec_eval
 from scipy import stats
 
 def per_query_analysis(qrel_book, predq_book, rsv_book, queries_0, queries_1):
+    print(queries_0)
     # print(qrel_book)
     print("DOWNSTREAM ANALYSES")
 
@@ -31,10 +32,13 @@ def per_query_analysis(qrel_book, predq_book, rsv_book, queries_0, queries_1):
             gt_list.append(gt[metric])
             ps_list.append(ps[metric])
             
+            print(qid)
             if(str(qid) in queries_0):
+                print(0)
                 gt_list_0.append(gt[metric])
                 ps_list_0.append(ps[metric])
             elif(str(qid) in queries_1):
+                print(1)
                 gt_list_1.append(gt[metric])
                 ps_list_1.append(ps[metric])
                 

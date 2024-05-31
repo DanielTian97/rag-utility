@@ -35,19 +35,19 @@ with open(file_path, 'rb') as f:
     result = pickle.load(f)
     f.close()
     
-import pandas as pd
-if('v2' not in dataset):
+# import pandas as pd
+# if('v2' not in 'dataset'):
 #     eva_0 = pd.read_csv(res_folder_path+'bm25_dl_19.eva.csv')
 #     eva_1 = pd.read_csv(res_folder_path+'bm25_dl_20.eva.csv')
 #     pred_eva = pd.read_csv(res_folder_path+f'pred_eva_bm25_dl_19_20-Q{coefficient}.csv')
-    queries_0 = pd.read_csv(mp_folder_path+'queries_19.csv')['qid'].astype('str').values
-    queries_1 = pd.read_csv(mp_folder_path+'queries_20.csv')['qid'].astype('str').values
-else:
+#     queries_0 = pd.read_csv(mp_folder_path+'queries_19.csv')['qid'].astype('str').values
+#     queries_1 = pd.read_csv(mp_folder_path+'queries_20.csv')['qid'].astype('str').values
+# else:
 #     eva_0 = pd.read_csv(res_folder_path+'bm25_dl_21.eva.csv')
 #     eva_1 = pd.read_csv(res_folder_path+'bm25_dl_22.eva.csv')
 #     pred_eva = pd.read_csv(res_folder_path+f'pred_eva_bm25_dl_21_22-Q{coefficient}.csv')
-    queries_0 = pd.read_csv(mp_folder_path+'queries_21.csv')['qid'].astype('str').values
-    queries_1 = pd.read_csv(mp_folder_path+'queries_22.csv')['qid'].astype('str').values
+#     queries_0 = pd.read_csv(mp_folder_path+'queries_21.csv')['qid'].astype('str').values
+#     queries_1 = pd.read_csv(mp_folder_path+'queries_22.csv')['qid'].astype('str').values
 # eva = pd.concat([eva_0, eva_1])
 # eva.qid = eva.qid.astype('str')
 
@@ -98,5 +98,5 @@ for record in result:
 # pseudo_qrel_df.to_csv(f'../middle_products/psuedo_qrel_{dataset}-Q{coefficient}.csv', index=False)
         
 ndcg_pred_qrel(result, qrel_book)
-per_query_analysis(qrel_book, predq_book, rsv_book, queries_0, queries_1)
+per_query_analysis(qrel_book, pred_book, predq_book, rsv_book)
 # correlation(result, eva, pred_eva, [queries_0, queries_1])

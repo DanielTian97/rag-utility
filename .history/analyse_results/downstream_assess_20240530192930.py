@@ -32,6 +32,7 @@ def per_query_analysis(qrel_book, predq_book, rsv_book, queries_0, queries_1):
             ps_list.append(ps[metric])
             
             if(str(qid) in queries_0):
+                print(0)
                 gt_list_0.append(gt[metric])
                 ps_list_0.append(ps[metric])
             elif(str(qid) in queries_1):

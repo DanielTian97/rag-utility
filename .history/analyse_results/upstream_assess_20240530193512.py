@@ -19,7 +19,7 @@ def ndcg_pred_qrel(result: list, qrel_book):
         print(f'{i}\t{sum(list_score[i])/len(list_score[i])}\t{min(list_score[i])}\t{max(list_score[i])}')
     
     print("----Per-query correlation between LLM score and ground truth")
-    qrel_evaluator = pytrec_eval.RelevanceEvaluator(qrel_book, {'ndcg_cut_10', 'ndcg_cut_20', 'ndcg_cut_50', 'ndcg_cut_80', 'ndcg_cut_100'})
+    qrel_evaluator = pytrec_eval.RelevanceEvaluator(qrel_book, {'ndcg_cut_10', 'ndcg_cut_20', 'ndcg_cut_50', 'ndcg_cut_100'})
     
     pred_books = {10: {}, 20: {}, 50: {}, 80: {}, 100: {}}
     for record in result:
@@ -35,7 +35,7 @@ def ndcg_pred_qrel(result: list, qrel_book):
             if(len(pred_books[c][qid]) < c):
                 pred_books[c][qid].update({docno: pred})
                 
-    print(f"Rerank cutoff\tnDCG@10\tnDCG@20\tnDCG@50\tnDCG@80\tnDCG@100")
+    print(f"Rerank cutoff\tnDCG@10\tnDCG@20\tnDCG@50\tnDCG@100")
     for c, pred_book in pred_books.items():
         
         evaluation_result = qrel_evaluator.evaluate(pred_book)
