@@ -16,9 +16,6 @@ class query_document_pair:
     def __str__(self) -> str:
         return f'qid_{self.qid}: {self.qText}; docno_{self.docno}; qrel: {self.qrel}; bm25_rsv: {self.rsv}.'
 
-def get_msmarco_passage_pairs():
-    get_msmarco_passage_pairs('msmarco_passage')
-
 def get_msmarco_passage_pairs(dataset: str):
     if('v2' not in dataset):
         dl_p1_res_df = pd.read_csv('./res/bm25_dl_19.csv')
@@ -87,4 +84,8 @@ def get_msmarco_passage_pairs(dataset: str):
         del(df_for_qid)
 
     return q_d_pair_list
+
+# def get_msmarco_passage_pairs():
+#     get_msmarco_passage_pairs('msmarco_passage')
+
 # print(q_d_pair_list)
