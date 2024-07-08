@@ -23,12 +23,12 @@ for query in query_list:
 
       output = llm(
             prompt, # Prompt
-            max_tokens=300, # Generate up to 32 tokens, set to None to generate up to the end of the context window
+            max_tokens=300, # Generate up to 300 tokens, set to None to generate up to the end of the context window
             stop=["STOP"], # Stop generating just before the model would generate a new question
-            echo=True, # Echo the prompt back in the output
-            # logprobs=3,
+            echo=False, # Echo the prompt back in the output
+            # logprobs=1,
             temperature=0,
-            top_k = 3,
+            # top_k = 3,
       ) # Generate a completion, can also call create_completion
 
       print(output)
