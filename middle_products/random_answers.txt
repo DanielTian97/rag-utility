@@ -1,0 +1,65 @@
+---QUERY---156493	do goldfish grow
+ Yes, goldfish can grow up to 6-8 inches in length and weigh around 1-2 pounds if properly cared for. They also have a relatively long lifespan of 5-10 years in captivity. However, their growth rate depends on factors such as water quality, diet, and living conditions. 
+PROB_LOG:-31.43237974361182
+ Yes, goldfish can grow up to 6-8 inches (15-20 cm) in length and weigh up to 1 pound (0.5 kg). However, their growth rate depends on factors such as diet, water quality, and living conditions. 
+PROB_LOG:-19.342238665460172
+ Yes, goldfish can grow up to 6-8 inches (15-20 cm) in length and weigh up to 1 pound (0.5 kg). However, their growth rate depends on various factors such as water quality, diet, and living conditions. 
+PROB_LOG:-18.484700116405293
+ Yes, goldfish can grow up to 6-8 inches in length and weigh up to 1 pound or more depending on the breed and living conditions. They also have a lifespan of around 5-10 years with proper care. 
+PROB_LOG:-22.719609727722855
+ Yes, goldfish can grow up to 6-8 inches in length and weigh up to 1 pound if they are well cared for and provided with proper nutrition. They also have a lifespan of around 5-10 years, depending on the breed and living conditions. 
+PROB_LOG:-28.10920706999059
+---QUERY---1110199	what is wifi vs bluetooth
+ WiFi and Bluetooth are both wireless technologies used for communication, but they differ in their purpose, range, and usage.
+
+WiFi is a type of wireless networking technology that allows devices to connect to the internet or communicate with each other over short distances (typically within a few hundred feet). It uses radio waves to transmit data between devices and requires an access point (AP) or router to facilitate communication. WiFi is commonly used for internet browsing, file sharing, and online gaming.
+
+Bluetooth, on the other hand, is a wireless personal area network (PAN) technology that allows devices to communicate with each other over short distances (typically within 30 feet). It uses radio waves to transmit data between devices and does not require an AP or router. Bluetooth is commonly used for wireless headsets, file transfer, and device pairing.
+
+In summary, WiFi is designed for longer-range communication and is typically used for internet access, while Bluetooth is designed for shorter-range communication and is typically used for device-to-device communication.
+
+
+PROB_LOG:-48.54320256633942
+ WiFi and Bluetooth are both wireless technologies used for communication, but they differ in their purpose, range, speed, and applications.
+
+WiFi is a type of wireless networking technology that allows devices to connect to the internet or communicate with each other over short distances. It uses radio waves to transmit data between devices and operates on a specific frequency band (2.4 GHz or 5 GHz). WiFi is commonly used for internet access, file sharing, and online gaming.
+
+Bluetooth, on the other hand, is a wireless personal area network technology that allows devices to communicate with each other over short distances (typically up to 30 feet). It uses radio waves to transmit data between devices and operates on a specific frequency band (2.4 GHz). Bluetooth is commonly used for file transfer, audio streaming, and device pairing.
+
+The main differences between WiFi and Bluetooth are:
+
+* Range: WiFi has a much longer range than Bluetooth, typically up to 150 feet indoors and up to 300 feet outdoors.
+* Speed: WiFi is generally faster than Bluetooth, with speeds of up to 1 Gbps (gigabit per second) compared to Bluetooth's maximum speed of 2 Mbps (megabits per second).
+* Purpose: WiFi is designed for internet access and networking, while Bluetooth is designed for device-to-device communication.
+
+In summary, WiFi is used for wireless internet access and networking, while Bluetooth is used for device-to-device communication over short distances. 
+PROB_LOG:-58.36758849030457
+ WiFi and Bluetooth are both wireless technologies used for communication, but they differ in their purpose, range, and application.
+
+WiFi is a type of wireless networking technology that allows devices to connect to the internet or communicate with each other over short distances (typically within a few hundred feet). It uses radio waves to transmit data between devices, and it operates on a specific frequency band (usually 2.4 GHz or 5 GHz). WiFi is commonly used in homes, offices, and public hotspots to provide internet access.
+
+Bluetooth, on the other hand, is a wireless personal area network technology that allows devices to communicate with each other over short distances (typically within 30 feet). It uses radio waves to transmit data between devices, but it operates on a different frequency band than WiFi (usually around 2.4 GHz). Bluetooth is commonly used in devices such as headphones, speakers, and keyboards to connect them to other devices.
+
+In summary, WiFi is designed for wireless networking and internet access, while Bluetooth is designed for device-to-device communication over short distances. 
+PROB_LOG:-51.290022445383585
+ WiFi and Bluetooth are both wireless technologies used for communication, but they differ in their range, speed, and purpose.
+
+WiFi is a type of wireless networking technology that allows devices to connect to the internet or communicate with each other within a limited range, typically around 30 feet. It uses radio waves to transmit data between devices, and it's commonly used for connecting devices to the internet, transferring files, and streaming media.
+
+Bluetooth, on the other hand, is a wireless personal area network (PAN) technology that allows devices to communicate with each other over short distances, typically around 30 feet. It uses radio waves to transmit data between devices, and it's commonly used for connecting devices such as headphones, speakers, keyboards, and mice to computers or smartphones.
+
+The main difference between WiFi and Bluetooth is the range and purpose of each technology. WiFi is designed for longer-range communication and is typically used for internet access and file transfer, while Bluetooth is designed for short-range communication and is typically used for device-to-device connectivity.
+
+
+PROB_LOG:-53.92721176235659
+ WiFi and Bluetooth are both wireless technologies used for communication, but they work in different ways and have different purposes.
+
+WiFi is a type of wireless networking technology that allows devices to connect to the internet or communicate with each other over short distances. It uses radio waves to transmit data between devices, and operates on a specific frequency band (2.4 GHz or 5 GHz). WiFi is commonly used for connecting devices to the internet, such as laptops, smartphones, and tablets.
+
+Bluetooth, on the other hand, is a wireless personal area network technology that allows devices to communicate with each other over short distances, typically up to 30 feet. It uses radio waves to transmit data between devices, but operates on a different frequency band (2.4 GHz) than WiFi. Bluetooth is commonly used for connecting devices such as headphones, speakers, and keyboards to smartphones or computers.
+
+In summary, WiFi is used for wireless networking and internet connectivity, while Bluetooth is used for wireless communication between devices over short distances. 
+PROB_LOG:-44.51781128364672
+---QUERY---1063750	why did the us volunterilay enter ww1
+ The United States entered World War I in April 1917, after more than two years of neutrality. The country's decision to enter the war was a result of several factors, including Germany's resumption of unrestricted submarine warfare and the sinking of American ships, as well as Germany's attempts to persuade Mexico to declare war on the United States. Additionally, President Woodrow Wilson's desire to "make the world safe for democracy" and his belief that the war was a moral crusade also played a significant role in the country's decision to enter the war. 
+PROB_LOG:-35.09424262443926

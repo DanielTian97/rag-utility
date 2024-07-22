@@ -10,7 +10,7 @@ def llama_call(llm, prompt):
                   echo=False, # Echo the prompt back in the output
                   logprobs=50,
                   top_k=50,
-                  temperature=0.8,
+                  temperature=0.3,
             ) # Generate a completion, can also call create_completion
       
       return output
@@ -36,7 +36,7 @@ llm = Llama(
       # n_ctx=2048, # Uncomment to increase the context window
 )
 
-llm.set_seed(1997)
+llm.set_seed(1000)
 
 query = ''
 
@@ -44,15 +44,21 @@ queries = pd.read_csv('./middle_products/queries_19.csv')
 qid_list = queries['qid'].tolist()
 query_list = queries['query'].tolist()
 
-for qid, query in zip(qid_list[:1], query_list[:1]):
-      print(qid)
+file_name = './middle_products/random_answers.txt'
+f = open(file_name, "w+")
+
+q_no = 0
+for qid, query in zip(qid_list, query_list):
+      print(f'{q_no} {qid}')
+      q_no += 1
+      f.write(f'---QUERY---{qid}\t{query}\n')
       
       preamble = "Please answer this question. End your answer with STOP."
       prompt = f'{preamble} Question: \'{query}\' \nAnswer: '
       print(prompt)
       
-
-      for i in range(10):
+      for i in range(5):
+            print(f'no.{i}')
             output = llama_call(llm, prompt)
             logprob_dict = output['choices'][0]['logprobs']['top_logprobs']
             # print(len(logprob_dict))
@@ -60,8 +66,12 @@ for qid, query in zip(qid_list[:1], query_list[:1]):
             prob_seq = sum(token_logprobs)
             
             answer = output['choices'][0]['text']
-            print(answer, prob_seq)
+            to_write = f'{answer}\nPROB_LOG:{prob_seq}\n'
+            f.write(to_write)
+            # print(answer, prob_seq)
             
       # print(output.keys())
   
     #   top_logits = output['choices'][0]['logprobs']['top_logprobs'][-1]
+    
+f.close()
