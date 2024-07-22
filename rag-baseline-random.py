@@ -45,7 +45,7 @@ qid_list = queries['qid'].tolist()
 query_list = queries['query'].tolist()
 
 file_name = './middle_products/random_answers.txt'
-f = open(file_name, "w+")
+f = open(file_name, "w+", encoding='UTF-8')
 
 q_no = 0
 for qid, query in zip(qid_list, query_list):
