@@ -22,24 +22,12 @@ def compose_context(res, qid: str):
       retrieved_num = retrieved_for_q['rank'].max()
       
       start = 0
-      
-      context_book = []
       while((start+batch_size-1) <= retrieved_num):
-            context = ''
             end = start + batch_size
             batch_docnos = retrieved_for_q[(retrieved_for_q['rank']>=start)&(retrieved_for_q['rank']<end)].docno.tolist()
-            batch_texts = [doc_dict[str(docno)] for docno in batch_docnos]
+            print(batch_docnos)
             
-            num = 0
-            for text in batch_texts:
-                  num += 1
-                  context += f'Context {num}: {text};\n'
-            
-            context_book.append(context)
             start += batch_size
-            # print(context)
-            
-      return context_book
             
 
 llm = Llama(
@@ -78,20 +66,20 @@ for qid, query in zip(qid_list[:1], query_list):
       
       preamble = "Please answer this question based on the given context. End your answer with STOP."
       context_book = compose_context(qid=qid, res=res)
-      for context in context_book:
-            prompt = f'{preamble} \n{context}Question: \'{query}\' \nAnswer: '
-            print(prompt)
+      # for context in context_book:
+      #       prompt = f'{preamble} Context: {context} \nQuestion: \'{query}\' \nAnswer: '
+      #       print(prompt)
             
-            for i in range(5):
-                  print(f'no.{i}')
-                  output = llama_call(llm, prompt)
-                  logprob_dict = output['choices'][0]['logprobs']['top_logprobs']
-                  # print(len(logprob_dict))
-                  token_logprobs = output['choices'][0]['logprobs']['token_logprobs']
-                  prob_seq = sum(token_logprobs)
+      #       for i in range(5):
+      #             print(f'no.{i}')
+      #             output = llama_call(llm, prompt)
+      #             logprob_dict = output['choices'][0]['logprobs']['top_logprobs']
+      #             # print(len(logprob_dict))
+      #             token_logprobs = output['choices'][0]['logprobs']['token_logprobs']
+      #             prob_seq = sum(token_logprobs)
                   
-                  answer = output['choices'][0]['text']
-                  to_write = f'{answer}\nPROB_LOG:{prob_seq}\n'
-                  f.write(to_write)
+      #             answer = output['choices'][0]['text']
+      #             to_write = f'{answer}\nPROB_LOG:{prob_seq}\n'
+      #             f.write(to_write)
     
 f.close()

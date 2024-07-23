@@ -37,7 +37,7 @@ def compose_context(res, qid: str):
             
             context_book.append(context)
             start += batch_size
-            # print(context)
+            print(context)
             
       return context_book
             
@@ -79,7 +79,7 @@ for qid, query in zip(qid_list[:1], query_list):
       preamble = "Please answer this question based on the given context. End your answer with STOP."
       context_book = compose_context(qid=qid, res=res)
       for context in context_book:
-            prompt = f'{preamble} \n{context}Question: \'{query}\' \nAnswer: '
+            prompt = f'{preamble} \n{context} \nQuestion: \'{query}\' \nAnswer: '
             print(prompt)
             
             for i in range(5):

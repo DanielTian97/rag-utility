@@ -37,7 +37,7 @@ def compose_context(res, qid: str):
             
             context_book.append(context)
             start += batch_size
-            # print(context)
+            print(context)
             
       return context_book
             
@@ -78,20 +78,20 @@ for qid, query in zip(qid_list[:1], query_list):
       
       preamble = "Please answer this question based on the given context. End your answer with STOP."
       context_book = compose_context(qid=qid, res=res)
-      for context in context_book:
-            prompt = f'{preamble} \n{context}Question: \'{query}\' \nAnswer: '
-            print(prompt)
+      # for context in context_book:
+      #       prompt = f'{preamble} \n{context} \nQuestion: \'{query}\' \nAnswer: '
+      #       print(prompt)
             
-            for i in range(5):
-                  print(f'no.{i}')
-                  output = llama_call(llm, prompt)
-                  logprob_dict = output['choices'][0]['logprobs']['top_logprobs']
-                  # print(len(logprob_dict))
-                  token_logprobs = output['choices'][0]['logprobs']['token_logprobs']
-                  prob_seq = sum(token_logprobs)
+      #       for i in range(5):
+      #             print(f'no.{i}')
+      #             output = llama_call(llm, prompt)
+      #             logprob_dict = output['choices'][0]['logprobs']['top_logprobs']
+      #             # print(len(logprob_dict))
+      #             token_logprobs = output['choices'][0]['logprobs']['token_logprobs']
+      #             prob_seq = sum(token_logprobs)
                   
-                  answer = output['choices'][0]['text']
-                  to_write = f'{answer}\nPROB_LOG:{prob_seq}\n'
-                  f.write(to_write)
+      #             answer = output['choices'][0]['text']
+      #             to_write = f'{answer}\nPROB_LOG:{prob_seq}\n'
+      #             f.write(to_write)
     
 f.close()
