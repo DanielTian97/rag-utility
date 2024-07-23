@@ -46,7 +46,7 @@ llm = Llama(
       model_path="../Meta-Llama-3-8B-Instruct/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
       logits_all=True,
       verbose=False,
-      # n_gpu_layers=-1, # Uncomment to use GPU acceleration
+      n_gpu_layers=-1, # Uncomment to use GPU acceleration
       # seed=1337, # Uncomment to set a specific seed
       # n_ctx=2048, # Uncomment to increase the context window
 )
