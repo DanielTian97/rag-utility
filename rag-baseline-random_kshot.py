@@ -22,11 +22,12 @@ def compose_context(res, qid: str):
       retrieved_for_q = res[res.qid==qid]
       retrieved_num = retrieved_for_q['rank'].max()
       
-      start = 0
-      
-      start_rank_list = []
+      starts = list(range(0, retrieved_num+2-batch_size, batch_size))
+      start_rank_list = list(set(starts[:5]).union(set(starts[-5:])))
+      start_rank_list.sort()
+      print(start_rank_list)
       context_book = []
-      while((start+batch_size-1) <= retrieved_num):
+      for start in start_rank_list:
             context = ''
             end = start + batch_size
             batch_docnos = retrieved_for_q[(retrieved_for_q['rank']>=start)&(retrieved_for_q['rank']<end)].docno.tolist()
@@ -37,10 +38,7 @@ def compose_context(res, qid: str):
                   num += 1
                   context += f'Context {num}: {text};\n'
             
-            start_rank_list.append(start)
             context_book.append(context)
-            start += batch_size
-            # print(context)
             
       return start_rank_list, context_book
             
@@ -50,8 +48,7 @@ llm = Llama(
       logits_all=True,
       verbose=False,
       n_gpu_layers=-1, # Uncomment to use GPU acceleration
-      # seed=1337, # Uncomment to set a specific seed
-      # n_ctx=2048, # Uncomment to increase the context window
+      n_ctx=2048, # Uncomment to increase the context window
 )
 
 llm.set_seed(1000)
@@ -70,7 +67,7 @@ qid_list = queries['qid'].tolist()
 query_list = queries['query'].tolist()
 res = pd.read_csv('./res/bm25_dl_19.csv') # retrieval result
 
-file_name = './middle_products/random_answers_5shot.txt'
+file_name = f'./middle_products/random_answers_{batch_size}shot.txt'
 f = open(file_name, "w+", encoding='UTF-8')
 
 q_no = 0
