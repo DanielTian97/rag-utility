@@ -1,6 +1,8 @@
 from llama_cpp import Llama
 from compose_prompts import *
 
+batch_size = 5
+
 def llama_call(llm, prompt):
       
       output = llm(
@@ -17,12 +19,12 @@ def llama_call(llm, prompt):
     
 def compose_context(res, qid: str):
       print(qid)
-      batch_size = 5
       retrieved_for_q = res[res.qid==qid]
       retrieved_num = retrieved_for_q['rank'].max()
       
       start = 0
       
+      start_rank_list = []
       context_book = []
       while((start+batch_size-1) <= retrieved_num):
             context = ''
@@ -35,11 +37,12 @@ def compose_context(res, qid: str):
                   num += 1
                   context += f'Context {num}: {text};\n'
             
+            start_rank_list.append(start)
             context_book.append(context)
             start += batch_size
             # print(context)
             
-      return context_book
+      return start_rank_list, context_book
             
 
 llm = Llama(
@@ -67,23 +70,25 @@ qid_list = queries['qid'].tolist()
 query_list = queries['query'].tolist()
 res = pd.read_csv('./res/bm25_dl_19.csv') # retrieval result
 
-file_name = './middle_products/random_answers.txt'
+file_name = './middle_products/random_answers_5shot.txt'
 f = open(file_name, "w+", encoding='UTF-8')
 
 q_no = 0
-for qid, query in zip(qid_list[:1], query_list):
+for qid, query in zip(qid_list, query_list):
       print(f'{q_no} {qid}')
       q_no += 1
       f.write(f'---QUERY---{qid}\t{query}\n')
       
       preamble = "Please answer this question based on the given context. End your answer with STOP."
-      context_book = compose_context(qid=qid, res=res)
-      for context in context_book:
+      start_records, context_book = compose_context(qid=qid, res=res)
+      for start, context in zip(start_records, context_book):
+            print(f'\tstart_rank.{start}')
+            f.write(f'---start_rank={start}---batch_size={batch_size}\n')
             prompt = f'{preamble} \n{context}Question: \'{query}\' \nAnswer: '
-            print(prompt)
+            # print(prompt)
             
-            for i in range(5):
-                  print(f'no.{i}')
+            for j in range(5):
+                  print(f'\t\tno.{j}')
                   output = llama_call(llm, prompt)
                   logprob_dict = output['choices'][0]['logprobs']['top_logprobs']
                   # print(len(logprob_dict))
