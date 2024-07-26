@@ -42,16 +42,20 @@ def compose_context(res, qid: str):
             
       return start_rank_list, context_book
             
+def load_llama():
+      llm = Llama(
+            model_path="../Meta-Llama-3-8B-Instruct/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
+            logits_all=True,
+            verbose=False,
+            n_gpu_layers=-1, # Uncomment to use GPU acceleration
+            n_ctx=2048, # Uncomment to increase the context window
+      )
 
-llm = Llama(
-      model_path="../Meta-Llama-3-8B-Instruct/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
-      logits_all=True,
-      verbose=False,
-      n_gpu_layers=-1, # Uncomment to use GPU acceleration
-      n_ctx=2048, # Uncomment to increase the context window
-)
+      llm.set_seed(1000)
+      return llm
 
-llm.set_seed(1000)
+# load the llm
+llm = load_llama()
 
 # read the retrieved documents
 import pickle
@@ -60,18 +64,14 @@ with open('./middle_products/msmarco_passage_v1_retrieved_top_tail.pkl', 'rb') a
     doc_dict = pickle.load(f)
     f.close()
 
-query = ''
-
 queries = pd.read_csv('./middle_products/queries_19.csv')
-qid_list = queries['qid'].tolist()
-query_list = queries['query'].tolist()
 res = pd.read_csv('./res/bm25_dl_19.csv') # retrieval result
 
 file_name = f'./middle_products/random_answers_{batch_size}shot.txt'
 f = open(file_name, "w+", encoding='UTF-8')
 
 q_no = 0
-for qid, query in zip(qid_list, query_list):
+for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
       print(f'{q_no} {qid}')
       q_no += 1
       f.write(f'---QUERY---{qid}\t{query}\n')
