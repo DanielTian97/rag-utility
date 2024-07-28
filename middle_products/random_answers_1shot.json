@@ -1,0 +1,64 @@
+{
+    "156493": {
+        "0": {
+            "0": {
+                "answer": " Yes, goldfish can grow up to 18 inches in length and weigh more than six pounds ",
+                "prob_seq": -4.328921178759629
+            }
+        },
+        "1": {
+            "0": {
+                "answer": " Yes, the conditions they are kept in plus their diet determine how large they will grow. ",
+                "prob_seq": -7.506929091352504
+            }
+        },
+        "2": {
+            "0": {
+                "answer": " Yes, goldfish grow but their growth is limited by the depth of water they are kept in. ",
+                "prob_seq": -9.503310614658403
+            }
+        },
+        "3": {
+            "0": {
+                "answer": " Yes, goldfish grow but their growth is stunted if they are kept in a tank that is not large enough for them to swim around comfortably. ",
+                "prob_seq": -16.49258719731006
+            }
+        },
+        "4": {
+            "0": {
+                "answer": " Goldfish can grow in a large tank but their growth becomes stunted in a small 5-gallon aquarium and they usually don't last more than a couple of years. ",
+                "prob_seq": -11.607284141331547
+            }
+        },
+        "5": {
+            "0": {
+                "answer": " Yes, they can grow fast if fed with a wide variety of food and high growth food. ",
+                "prob_seq": -10.75070910830982
+            }
+        },
+        "6": {
+            "0": {
+                "answer": " Goldfish can grow up to 4-6 inches in length, but it is rare for them to reach such sizes in captivity. In the wild, goldfish can grow larger due to factors like food availability and water quality. The photo you saw of a 2-1/2 foot long goldfish might be mislabeled or exaggerated. Koi are actually a different species from goldfish and can grow much larger, up to 3 feet in length. ",
+                "prob_seq": -42.39256175358241
+            }
+        },
+        "7": {
+            "0": {
+                "answer": " Yes, goldfish can grow up to 10-12 inches in length. ",
+                "prob_seq": -5.3754725706457975
+            }
+        },
+        "8": {
+            "0": {
+                "answer": " Goldfish grow to be no more than 1 foot long. ",
+                "prob_seq": -1.815162420803972
+            }
+        },
+        "9": {
+            "0": {
+                "answer": " Yes, goldfish can grow up to 8-12 inches depending on their breed and environment ",
+                "prob_seq": -14.251806884713005
+            }
+        }
+    }
+}
