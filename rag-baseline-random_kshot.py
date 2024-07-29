@@ -90,7 +90,7 @@ if __name__=="__main__":
             print("This experiment takes 6 parameters: ")
             print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\ntemperature")
             print("e.g. 1 1 1 10 0 0.2")
-      
+
       batch_size = int(sys.argv[1])
       batch_step = int(sys.argv[2])
       num_calls = int(sys.argv[3])
@@ -125,7 +125,7 @@ if __name__=="__main__":
       preamble = "Please answer this question based on the given context. End your answer with STOP."
 
       q_no = 0
-      for qid, query in zip(queries['qid'].tolist()[:1], queries['query'].tolist()):
+      for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
             print(f'q_number={q_no}--{qid}')
             q_no += 1
             varying_context_result = {} #{start: results}
