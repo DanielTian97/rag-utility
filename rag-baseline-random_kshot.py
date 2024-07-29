@@ -86,20 +86,38 @@ def single_call(llm, prompt, temperature):
       return result
 
 if __name__=="__main__":
-      # dataset = str(sys.argv[1])
+      if(len(sys.argv) != 7):
+            print("This experiment takes 6 parameters: ")
+            print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\ntemperature")
+            print("e.g. 1 1 1 10 0 0.2")
       
-      batch_size = 1
-      batch_step = 1
-      num_calls = 1
+      batch_size = int(sys.argv[1])
+      batch_step = int(sys.argv[2])
+      num_calls = int(sys.argv[3])
       # start control parameters
-      top_starts = 10
-      tail_starts = 0
-      temperature = 0.2
+      top_starts = int(sys.argv[4])
+      tail_starts = int(sys.argv[5])
+      temperature = float(sys.argv[6])
+      
+      # batch_size = 1
+      # batch_step = 1
+      # num_calls = 1
+      # # start control parameters
+      # top_starts = 10
+      # tail_starts = 0
+      # temperature = 0.2
       
       # load the llm
       llm = load_llama()
       # load needed data
       doc_dict, queries, res = prepare_data()
+      
+      setting_file_name = f'./middle_products/random_answers_{batch_size}shot_settings.json'
+      setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
+                  'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
+      f = open(setting_file_name, "w+", encoding='UTF-8')
+      json.dump(setting_record, f, indent=4)
+      f.close()
 
       result_to_write = {} #{qid:result_for_qid}
       file_name = f'./middle_products/random_answers_{batch_size}shot.json'
@@ -107,7 +125,7 @@ if __name__=="__main__":
       preamble = "Please answer this question based on the given context. End your answer with STOP."
 
       q_no = 0
-      for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
+      for qid, query in zip(queries['qid'].tolist()[:1], queries['query'].tolist()):
             print(f'q_number={q_no}--{qid}')
             q_no += 1
             varying_context_result = {} #{start: results}
