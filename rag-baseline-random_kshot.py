@@ -112,7 +112,7 @@ if __name__=="__main__":
       # load needed data
       doc_dict, queries, res = prepare_data()
       
-      setting_file_name = f'./middle_products/random_answers_{batch_size}shot_settings.json'
+      setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_settings.json'
       setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
                   'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
@@ -120,7 +120,7 @@ if __name__=="__main__":
       f.close()
 
       result_to_write = {} #{qid:result_for_qid}
-      file_name = f'./middle_products/random_answers_{batch_size}shot.json'
+      file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls.json'
 
       preamble = "Please answer this question based on the given context. End your answer with STOP."
 
