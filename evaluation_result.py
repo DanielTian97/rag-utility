@@ -27,7 +27,16 @@ def get_docnos(qid, doc_dict, qrels):
     return docno_dict
 
 def evaluator(to_eval: str, docno_dict: dict, qrel_level: int):
+    print(f'\t\t\t{qrel_level}')
+    
     doc_texts = docno_dict[qrel_level]
+    if(len(doc_texts)==0):
+        r = {\
+            'precision': {'avg': -1, 'max': -1},\
+            'recall': {'avg': -1, 'max': -1},\
+            'f1': {'avg': -1, 'max': -1},\
+            }
+        return r
 
     pred_text = to_eval
     predictions = len(doc_texts)*[pred_text]
@@ -36,7 +45,6 @@ def evaluator(to_eval: str, docno_dict: dict, qrel_level: int):
 
     precisions, recall, f1 = results['precision'], results['recall'], results['f1']
 
-    print(f'\t\t\t{qrel_level}')
     # print('precision', sum(precisions)/len(precisions), max(precisions))
     # print('recall', sum(recall)/len(recall), max(recall))
     # print('f1', sum(f1)/len(f1), max(f1))
@@ -70,8 +78,20 @@ with open(file=file_path, mode="r") as f:
     f.close()
 
 eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_eval.json'
-eval_result_dict = {}
-for qid in [str(id) for id in qids]:
+# create the file
+try:
+    f = open(file=eval_file_path, mode="r")
+    existed_results = json.load(f)
+    existed_qids = len(existed_results)
+    f.close()
+except:
+    f = open(file=eval_file_path, mode="w+")
+    existed_results = {}
+    existed_qids = 0
+    f.close()
+    
+# eval_result_dict = {}
+for qid in [str(id) for id in qids[existed_qids:]]:
     print(f'Qid={qid}')
     eval_result_qid = {}
     for start in range(len(answer_book[str(qid)])):
@@ -87,10 +107,15 @@ for qid in [str(id) for id in qids]:
             eval_result_start.update({i: r})
         eval_result_qid.update({start: eval_result_start})
     
-    eval_result_dict.update({qid: eval_result_qid})
-    
+    # eval_result_dict.update({qid: eval_result_qid})
+
+    with open(file=eval_file_path, mode="r") as f:
+        # existed_results = json.load(f)
+        existed_results.update({qid: eval_result_qid})
+        f.close()
+
     with open(file=eval_file_path, mode="w+") as f:
-        json.dump(eval_result_dict, f, indent=4)
+        json.dump(existed_results, f, indent=4)
         f.close()
     
         
