@@ -2,6 +2,7 @@ from evaluate import load
 import pandas as pd
 import pickle
 import json
+import sys
 
 def prepare_qids_qrels_docdict():
 
@@ -64,58 +65,63 @@ def eval_by_qrels(to_eval: str, docno_dict):
     r = {'qrel_0': r0, 'qrel_1': r1, 'qrel_2': r2, 'qrel_3': r3}
     return r
 
-# experiment begins
-bertscore = load("bertscore")
-# prepare data
-qids, qrels, doc_dict = prepare_qids_qrels_docdict()
-# read the generated answers
-batch_size = 1
-num_calls = 5
-file_path = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls.json'
-
-with open(file=file_path, mode="r") as f:
-    answer_book = json.load(f)
-    f.close()
-
-eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_eval.json'
-# create the file
-try:
-    f = open(file=eval_file_path, mode="r")
-    existed_results = json.load(f)
-    existed_qids = len(existed_results)
-    f.close()
-except:
-    f = open(file=eval_file_path, mode="w+")
-    existed_results = {}
-    existed_qids = 0
-    f.close()
+if __name__=="__main__":
     
-# eval_result_dict = {}
-for qid in [str(id) for id in qids[existed_qids:]]:
-    print(f'Qid={qid}')
-    eval_result_qid = {}
-    for start in range(len(answer_book[str(qid)])):
-        print(f'\tstart={start}, batch={batch_size}')
-        eval_result_start = {}
-        for i in range(len(answer_book[str(qid)][str(start)])):
-            print(f'\t\t{i}')
-            to_eval = answer_book[str(qid)][str(start)][str(i)]['answer']
-            docno_dict = get_docnos(qid=qid, doc_dict=doc_dict, qrels=qrels)
-
-            r = eval_by_qrels(to_eval=to_eval, docno_dict=docno_dict)
-
-            eval_result_start.update({i: r})
-        eval_result_qid.update({start: eval_result_start})
+    batch_size = int(sys.argv[1])
+    num_calls = int(sys.argv[2])
     
-    # eval_result_dict.update({qid: eval_result_qid})
+    # experiment begins
+    bertscore = load("bertscore")
+    # prepare data
+    qids, qrels, doc_dict = prepare_qids_qrels_docdict()
+    # read the generated answers
+    # batch_size = 1
+    # num_calls = 5
+    file_path = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls.json'
 
-    with open(file=eval_file_path, mode="r") as f:
-        # existed_results = json.load(f)
-        existed_results.update({qid: eval_result_qid})
+    with open(file=file_path, mode="r") as f:
+        answer_book = json.load(f)
         f.close()
 
-    with open(file=eval_file_path, mode="w+") as f:
-        json.dump(existed_results, f, indent=4)
+    eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_eval.json'
+    # create the file
+    try:
+        f = open(file=eval_file_path, mode="r")
+        existed_results = json.load(f)
+        existed_qids = len(existed_results)
         f.close()
-    
+    except:
+        f = open(file=eval_file_path, mode="w+")
+        existed_results = {}
+        existed_qids = 0
+        f.close()
         
+    # eval_result_dict = {}
+    for qid in [str(id) for id in qids[existed_qids:]]:
+        print(f'Qid={qid}')
+        eval_result_qid = {}
+        for start in answer_book[str(qid)].keys():
+            print(f'\tstart={start}, batch={batch_size}')
+            eval_result_start = {}
+            for i in answer_book[str(qid)][str(start)].keys():
+                print(f'\t\t{i}')
+                to_eval = answer_book[str(qid)][str(start)][str(i)]['answer']
+                docno_dict = get_docnos(qid=qid, doc_dict=doc_dict, qrels=qrels)
+
+                r = eval_by_qrels(to_eval=to_eval, docno_dict=docno_dict)
+
+                eval_result_start.update({i: r})
+            eval_result_qid.update({start: eval_result_start})
+        
+        # eval_result_dict.update({qid: eval_result_qid})
+
+        with open(file=eval_file_path, mode="r") as f:
+            # existed_results = json.load(f)
+            existed_results.update({qid: eval_result_qid})
+            f.close()
+
+        with open(file=eval_file_path, mode="w+") as f:
+            json.dump(existed_results, f, indent=4)
+            f.close()
+        
+            
