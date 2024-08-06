@@ -82,7 +82,7 @@ def single_call(llm, prompt, temperature):
                   
       answer = output['choices'][0]['text']
                   
-      result = {"answer": answer, "prob_seq": prob_seq}
+      result = {"answer": answer, "prob_seq": float(prob_seq)}
       return result
 
 if __name__=="__main__":
