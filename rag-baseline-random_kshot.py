@@ -119,13 +119,24 @@ if __name__=="__main__":
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      result_to_write = {} #{qid:result_for_qid}
       file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls.json'
+      # result_to_write = {} #{qid:result_for_qid}
+
+      try:
+            f = open(file=file_name, mode="r")
+            result_to_write = json.load(f)
+            existed_qids = len(result_to_write)
+            f.close()
+      except:
+            f = open(file=file_name, mode="w+")
+            result_to_write= {}
+            existed_qids = 0
+            f.close()
 
       preamble = "Please answer this question based on the given context. End your answer with STOP."
 
       q_no = 0
-      for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
+      for qid, query in zip(queries['qid'].tolist()[existed_qids:], queries['query'].tolist()[existed_qids:]):
             print(f'q_number={q_no}--{qid}')
             q_no += 1
             varying_context_result = {} #{start: results}
