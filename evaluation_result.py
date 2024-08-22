@@ -68,7 +68,15 @@ def eval_by_qrels(to_eval: str, docno_dict):
 if __name__=="__main__":
     
     batch_size = int(sys.argv[1])
-    num_calls = int(sys.argv[2])
+    num_calls = sys.argv[2]
+    if(len(sys.argv) == 4):
+        experiment_type = sys.argv[3] # p for permutation tests
+        file_path = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{experiment_type}.json'
+        eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_{experiment_type}_eval.json'
+        
+    else:
+        file_path = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls.json'
+        eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_eval.json'
     
     # experiment begins
     bertscore = load("bertscore")
@@ -77,13 +85,11 @@ if __name__=="__main__":
     # read the generated answers
     # batch_size = 1
     # num_calls = 5
-    file_path = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls.json'
 
     with open(file=file_path, mode="r") as f:
         answer_book = json.load(f)
         f.close()
-
-    eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_eval.json'
+    
     # create the file
     try:
         f = open(file=eval_file_path, mode="r")
