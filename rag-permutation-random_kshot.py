@@ -51,11 +51,19 @@ def compose_context_with_permutations(res, qid: str, batch_size, batch_step, top
       return p_name_list, context_book
             
 def load_llama():
+      
+      import torch
+      if(torch.cuda.is_available()):
+            gpu_layers = 30
+      else:
+            gpu_layers = -1
+      print('GPU_LAYERS', gpu_layers)
+      
       llm = Llama(
             model_path="../Meta-Llama-3-8B-Instruct/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
             logits_all=True,
             verbose=False,
-            n_gpu_layers=-1, # Uncomment to use GPU acceleration
+            n_gpu_layers=gpu_layers, # Uncomment to use GPU acceleration
             n_ctx=2048, # Uncomment to increase the context window
       )
 
