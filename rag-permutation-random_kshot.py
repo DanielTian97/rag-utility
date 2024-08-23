@@ -53,8 +53,9 @@ def compose_context_with_permutations(res, qid: str, batch_size, batch_step, top
 def load_llama():
       
       import torch
-      print(torch.cuda.is_available())
-      if(torch.cuda.is_available()):
+      device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+      print(device)
+      if(device == 'cuda'):
             gpu_layers = 30
       else:
             gpu_layers = -1
