@@ -80,6 +80,6 @@ if __name__=="__main__":
                   prob_seq = sum(token_logprobs)
                   
                   answer = output['choices'][0]['text']
-                  answers_0shot.update({i: {"answer": answer, "prob_seq": prob_seq}})
+                  answers_0shot.update({i: {"answer": answer, "prob_seq": float(prob_seq)}})
             
             update_json_result_file(file_name=file_name, result_to_write=result_to_write)
