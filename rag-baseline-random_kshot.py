@@ -146,7 +146,6 @@ if __name__=="__main__":
 
       q_no = existed_qids
       for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
-            llm.set_seed(1000) # added 0824
             print(f'q_number={q_no}--{qid}')
             q_no += 1
             if(str(qid) not in existed_qids_list):
@@ -159,6 +158,7 @@ if __name__=="__main__":
 
             start_records, context_book = compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict)
             for start, context in zip(start_records, context_book):
+                  llm.set_seed(1000) # added 0824
                   if(str(start) in existing_starts):
                         continue
                   print(f'\tstart_rank.{start}')
