@@ -45,17 +45,15 @@ def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_star
 def load_llama():
       
       import torch
-      if(torch.cuda.is_available()):
-            gpu_layers = 30
-      else:
-            gpu_layers = -1
-      print(gpu_layers)
+      print(torch.__version__)
+      device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+      print(device)
       
       llm = Llama(
             model_path="../Meta-Llama-3-8B-Instruct/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
             logits_all=True,
             verbose=False,
-            n_gpu_layers=gpu_layers, # Uncomment to use GPU acceleration
+            n_gpu_layers=-1, # Uncomment to use GPU acceleration
             n_ctx=2048, # Uncomment to increase the context window
       )
 
@@ -133,33 +131,44 @@ if __name__=="__main__":
       try:
             f = open(file=file_name, mode="r")
             result_to_write = json.load(f)
+            existed_qids_list = list(result_to_write.keys())
+            print(existed_qids_list)
             existed_qids = len(result_to_write)
             f.close()
       except:
             f = open(file=file_name, mode="w+")
             result_to_write= {}
+            existed_qids_list = []
             existed_qids = 0
             f.close()
 
       preamble = "Please answer this question based on the given context. End your answer with STOP."
 
       q_no = existed_qids
-      for qid, query in zip(queries['qid'].tolist()[existed_qids:], queries['query'].tolist()[existed_qids:]):
+      for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
+            llm.set_seed(1000) # added 0824
             print(f'q_number={q_no}--{qid}')
             q_no += 1
-            varying_context_result = {} #{start: results}
-            
+            if(str(qid) not in existed_qids_list):
+                  varying_context_result = {} #{start: results}
+                  existing_starts = []
+            else:
+                  varying_context_result = result_to_write[str(qid)] #added 0824
+                  existing_starts = list(varying_context_result.keys()) #added 0824
+                  print(existing_starts)
+
             start_records, context_book = compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict)
             for start, context in zip(start_records, context_book):
+                  if(str(start) in existing_starts):
+                        continue
                   print(f'\tstart_rank.{start}')
                   prompt = f'{preamble} \n{context}Question: \'{query}\' \nAnswer: '
                   multi_call_results = {}
-                  varying_context_result.update({start: multi_call_results})
-                  
                   for j in range(num_calls):
                         print(f'\t\tno.{j}')
                         result = single_call(llm=llm, prompt=prompt, temperature=temperature)
                         multi_call_results.update({j: result})
+                  varying_context_result.update({start: multi_call_results})
                         
             result_to_write.update({qid: varying_context_result})              
             update_json_result_file(file_name=file_name, result_to_write=result_to_write)
