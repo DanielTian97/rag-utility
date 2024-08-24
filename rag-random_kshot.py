@@ -92,10 +92,10 @@ def single_call(llm, prompt, temperature):
       return result
 
 if __name__=="__main__":
-      if(len(sys.argv) != 7):
-            print("This experiment takes 6 parameters: ")
-            print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\ntemperature")
-            print("e.g. 1 1 1 10 0 0.2")
+      if(len(sys.argv) != 8):
+            print("This experiment takes 7 parameters: ")
+            print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.19/20")
+            print("e.g. 1 1 1 10 0 0.3 19")
 
       batch_size = int(sys.argv[1])
       batch_step = int(sys.argv[2])

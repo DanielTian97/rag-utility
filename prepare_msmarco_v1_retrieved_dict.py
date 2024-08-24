@@ -2,9 +2,14 @@ from evaluate import load
 bertscore = load("bertscore")
 
 import pandas as pd
-queries = pd.read_csv('./middle_products/queries_19.csv')
+queries_19 = pd.read_csv('./middle_products/queries_19.csv')
+queries_20 = pd.read_csv('./middle_products/queries_20.csv')
+queries = pd.concat([queries_19, queries_20])
 qids = queries.qid.tolist()
-res = pd.read_csv('./res/bm25_dl_19.csv')
+
+res_19 = pd.read_csv('./res/bm25_dl_19.csv')
+res_20 = pd.read_csv('./res/bm25_dl_20.csv')
+res = pd.concat([res_19, res_20])
 
 # for qid in queries.qid:
     # retrieved_num = res[res.qid==qid]['rank'].max()
