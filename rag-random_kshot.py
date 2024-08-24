@@ -126,7 +126,7 @@ if __name__=="__main__":
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_dl{dataset_name}.json'
+      file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_dl_{dataset_name}.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
