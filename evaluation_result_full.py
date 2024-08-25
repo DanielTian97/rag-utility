@@ -4,12 +4,12 @@ import pickle
 import json
 import sys
 
-def prepare_qids_qrels_docdict():
+def prepare_qids_qrels_docdict(dataset_name):
 
     with open('./middle_products/msmarco_passage_v1_qrels.pkl', 'rb') as f:
         doc_dict = pickle.load(f)
     
-    queries = pd.read_csv('./middle_products/queries_19.csv')
+    queries = pd.read_csv('./middle_products/queries_{dataset_name}.csv')
     queries['qid'] = queries['qid'].astype('str')
     qids = queries.qid.tolist()
     qrels = pd.read_csv('./middle_products/qrels.csv')
@@ -77,7 +77,7 @@ if __name__=="__main__":
     # experiment begins
     bertscore = load("bertscore")
     # prepare data
-    qids, qrels, doc_dict = prepare_qids_qrels_docdict()
+    qids, qrels, doc_dict = prepare_qids_qrels_docdict(dataset_name)
     # read the generated answers
     # batch_size = 1
     # num_calls = 5
