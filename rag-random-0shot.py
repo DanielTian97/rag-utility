@@ -57,7 +57,7 @@ if __name__=="__main__":
       qid_list = queries['qid'].tolist()
       query_list = queries['query'].tolist()
 
-      file_name = './middle_products/random_answers.txt'
+      file_name = f'./middle_products/random_answers_0shot_{num_calls}calls_dl_{dataset_name}.json'
 
       q_no = 0
       for qid, query in zip(qid_list, query_list):
