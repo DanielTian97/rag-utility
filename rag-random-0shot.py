@@ -1,21 +1,8 @@
 from llama_cpp import Llama
+from llama_tools import llama_tools
 from compose_prompts import *
 import json
 import sys
-
-def llama_call(llm, prompt):
-      
-      output = llm(
-                  prompt, # Prompt
-                  max_tokens=300, # Generate up to 300 tokens, set to None to generate up to the end of the context window
-                  stop=["STOP"], # Stop generating just before the model would generate a new question
-                  echo=False, # Echo the prompt back in the output
-                  logprobs=50,
-                  top_k=50,
-                  temperature=0.3,
-            ) # Generate a completion, can also call create_completion
-      
-      return output
 
 def update_json_result_file(file_name, result_to_write):
       f = open(file_name, "w+", encoding='UTF-8')
@@ -42,14 +29,7 @@ if __name__=="__main__":
             existed_qids = 0
             f.close()
 
-      llm = Llama(
-            model_path="../Meta-Llama-3-8B-Instruct/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
-            logits_all=True,
-            verbose=False,
-            n_gpu_layers=-1, # Uncomment to use GPU acceleration
-            # seed=1337, # Uncomment to set a specific seed
-            # n_ctx=2048, # Uncomment to increase the context window
-      )
+      llm = llama_tools.load_llama()
 
       query = ''
 
@@ -73,7 +53,7 @@ if __name__=="__main__":
             
             for i in range(num_calls):
                   print(f'no.{i}')
-                  output = llama_call(llm, prompt)
+                  output = llama_tools.llama_call(llm, prompt, 0.3)
                   logprob_dict = output['choices'][0]['logprobs']['top_logprobs']
 
                   token_logprobs = output['choices'][0]['logprobs']['token_logprobs']
