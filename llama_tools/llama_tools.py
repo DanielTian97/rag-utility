@@ -13,7 +13,7 @@ def llama_call(llm, prompt, temperature):
       return output
   
 def load_llama():
-
+    
     from llama_cpp import Llama
     import torch
     print(torch.__version__)
