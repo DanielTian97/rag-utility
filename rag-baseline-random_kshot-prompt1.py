@@ -142,7 +142,7 @@ if __name__=="__main__":
             existed_qids = 0
             f.close()
 
-      preamble = "Please answer this question based on the given context. End your answer with <STOP>."
+      preamble = "You are an expert at answering questions based on your own knowledge and related context. Please answer this question based on the given context. End your answer with <STOP>."
 
       q_no = existed_qids
       for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
