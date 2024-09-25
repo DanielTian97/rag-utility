@@ -68,14 +68,14 @@ if __name__=="__main__":
       # load needed data
       doc_dict, queries, res = prepare_data(dataset_name)
       
-      setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_dl_{dataset_name}_prompt1_settings.json'
+      setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_dl_{dataset_name}_prompt1_settings.json'
       setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
                   'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_dl_{dataset_name}_prompt1.json'
+      file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_dl_{dataset_name}_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
