@@ -112,7 +112,7 @@ if __name__=="__main__":
                   if(str(start) in existing_starts):
                         continue
                   print(f'\tstart_rank.{start}')
-                  prompt = f'{preamble} \n{context}\nQuestion: "{query}" \nAnswer: '
+                  prompt = f'{preamble} \n{context}Question: "{query}"\nNow start your answer. \nAnswer: '
                   print(prompt)
                   multi_call_results = {}
                   for j in range(num_calls):
