@@ -114,12 +114,12 @@ if __name__=="__main__":
                   print(f'\tstart_rank.{start}')
                   prompt = f'{preamble} \n{context}Question: "{query}" \nAnswer: '
                   print(prompt)
-                  multi_call_results = {}
-                  for j in range(num_calls):
-                        print(f'\t\tno.{j}')
-                        result = llama_tools.single_call(llm=llm, prompt=prompt, temperature=temperature)
-                        multi_call_results.update({j: result})
-                  varying_context_result.update({start: multi_call_results})
+            #       multi_call_results = {}
+            #       for j in range(num_calls):
+            #             print(f'\t\tno.{j}')
+            #             result = llama_tools.single_call(llm=llm, prompt=prompt, temperature=temperature)
+            #             multi_call_results.update({j: result})
+            #       varying_context_result.update({start: multi_call_results})
                         
-            result_to_write.update({qid: varying_context_result})              
-            update_json_result_file(file_name=file_name, result_to_write=result_to_write)
+            # result_to_write.update({qid: varying_context_result})              
+            # update_json_result_file(file_name=file_name, result_to_write=result_to_write)
