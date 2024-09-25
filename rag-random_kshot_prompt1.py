@@ -113,6 +113,7 @@ if __name__=="__main__":
                         continue
                   print(f'\tstart_rank.{start}')
                   prompt = f'{preamble} \n{context}Question: \'{query}\' \nAnswer: '
+                  print(prompt)
                   multi_call_results = {}
                   for j in range(num_calls):
                         print(f'\t\tno.{j}')
