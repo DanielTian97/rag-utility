@@ -3,7 +3,7 @@ def llama_call(llm, prompt, temperature):
       output = llm(
                   prompt, # Prompt
                   max_tokens=300, # Generate up to 300 tokens, set to None to generate up to the end of the context window
-                  stop=["STOP"], # Stop generating just before the model would generate a new question
+                #   stop=["STOP"], # Stop generating just before the model would generate a new question
                   echo=False, # Echo the prompt back in the output
                   logprobs=50,
                   top_k=50,
