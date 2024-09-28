@@ -103,9 +103,9 @@ from permutation_generator import *
 #       return result
 
 if __name__=="__main__":
-      if(len(sys.argv) != 8):
-            print("This experiment takes 7 parameters: ")
-            print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\ntemperature\nwhether_exam_full_permutations")
+      if(len(sys.argv) != 9):
+            print("This experiment takes 8 parameters: ")
+            print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\ntemperature\nwhether_exam_full_permutations\n19/20")
             print("e.g. 1 1 1 10 0 0.2 False")
 
       batch_size = int(sys.argv[1])
@@ -116,11 +116,12 @@ if __name__=="__main__":
       tail_starts = int(sys.argv[5])
       temperature = float(sys.argv[6])
       full_permutation = bool(sys.argv[7])
+      dataset_name = str(sys.argv[8])
       
       # load the llm
       llm = llama_tools.load_llama()
       # load needed data
-      doc_dict, queries, res = prepare_data()
+      doc_dict, queries, res = prepare_data(dataset_name)
       
       setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_settings_p_prompt1.json'
       setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
