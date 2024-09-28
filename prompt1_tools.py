@@ -1,3 +1,5 @@
+from permutation_generator import *
+
 # prepare needed files
 def prepare_data(dataset_name: str):
     import pandas as pd
@@ -38,3 +40,36 @@ def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_star
         context_book.append(context)
             
     return start_rank_list, context_book
+
+def compose_context_with_permutations(res, qid: str, batch_size, batch_step, top_starts, tail_starts, doc_dict, FULL_PERMUTATION):
+    
+    print(qid)
+    retrieved_for_q = res[res.qid==qid]
+    retrieved_num = retrieved_for_q['rank'].max()+1
+      
+    starts = list(range(0, (retrieved_num-1)-(batch_size-1)+1, batch_step))
+    start_rank_list = list(set(starts[:top_starts]).union(set(starts[(len(starts)-1)-(tail_starts-1):])))
+    print(start_rank_list)
+    start_rank_list.sort()
+      
+    p_name_list = []
+    context_book = []
+    for start in start_rank_list:
+        end = start + batch_size
+        batch_docnos = retrieved_for_q[(retrieved_for_q['rank']>=start)&(retrieved_for_q['rank']<end)].docno.tolist()
+
+        permuntation_docnos = get_permutation(batch_docnos, len(batch_docnos), FULL_PERMUTATIONS=FULL_PERMUTATION)
+            
+        for p_name, p_batch_docnos in permuntation_docnos.items():
+            context = ''
+                  
+            batch_texts = [doc_dict[str(docno)] for docno in p_batch_docnos]
+            num = 0
+            for text in batch_texts:
+                num += 1
+                context += f'Context {num}: "{text}";\n'
+                  
+            p_name_list.append(f'{start}>{p_name}')
+            context_book.append(context)
+            
+    return p_name_list, context_book
