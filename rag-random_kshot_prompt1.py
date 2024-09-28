@@ -1,52 +1,54 @@
 from llama_cpp import Llama
 from compose_prompts import *
 from llama_tools import llama_tools
+from experiment_tools import *
+from prompt1_tools import *
 import json
 import sys
     
-def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_starts, doc_dict):
-      print(qid)
-      retrieved_for_q = res[res.qid==qid]
-      retrieved_num = retrieved_for_q['rank'].max()+1
+# def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_starts, doc_dict):
+#       print(qid)
+#       retrieved_for_q = res[res.qid==qid]
+#       retrieved_num = retrieved_for_q['rank'].max()+1
       
-      starts = list(range(0, (retrieved_num-1)-(batch_size-1)+1, batch_step))
-      start_rank_list = list(set(starts[:top_starts]).union(set(starts[(len(starts)-1)-(tail_starts-1):])))
-      start_rank_list.sort()
-      print(start_rank_list)
-      context_book = []
-      for start in start_rank_list:
-            context = ''
-            end = start + batch_size
-            batch_docnos = retrieved_for_q[(retrieved_for_q['rank']>=start)&(retrieved_for_q['rank']<end)].docno.tolist()
-            batch_texts = [doc_dict[str(docno)] for docno in batch_docnos]
+#       starts = list(range(0, (retrieved_num-1)-(batch_size-1)+1, batch_step))
+#       start_rank_list = list(set(starts[:top_starts]).union(set(starts[(len(starts)-1)-(tail_starts-1):])))
+#       start_rank_list.sort()
+#       print(start_rank_list)
+#       context_book = []
+#       for start in start_rank_list:
+#             context = ''
+#             end = start + batch_size
+#             batch_docnos = retrieved_for_q[(retrieved_for_q['rank']>=start)&(retrieved_for_q['rank']<end)].docno.tolist()
+#             batch_texts = [doc_dict[str(docno)] for docno in batch_docnos]
             
-            num = 0
-            for text in batch_texts:
-                  num += 1
-                  context += f'Context {num}: "{text}";\n'
+#             num = 0
+#             for text in batch_texts:
+#                   num += 1
+#                   context += f'Context {num}: "{text}";\n'
             
-            context_book.append(context)
+#             context_book.append(context)
             
-      return start_rank_list, context_book
+#       return start_rank_list, context_book
 
-def update_json_result_file(file_name, result_to_write):
-      f = open(file_name, "w+", encoding='UTF-8')
-      json.dump(result_to_write, f, indent=4)
-      f.close()
+# def update_json_result_file(file_name, result_to_write):
+#       f = open(file_name, "w+", encoding='UTF-8')
+#       json.dump(result_to_write, f, indent=4)
+#       f.close()
 
-# prepare needed files
-def prepare_data(dataset_name: str):
-      # read the retrieved documents
-      import pickle
-      with open('./middle_products/msmarco_passage_v1_retrieved_top_tail.pkl', 'rb') as f:
-            doc_dict = pickle.load(f)
-            f.close()
-      # prepare queries
-      queries = pd.read_csv(f'./middle_products/queries_{dataset_name}.csv')
-      # prepare res file
-      res = pd.read_csv(f'./res/bm25_dl_{dataset_name}.csv') # retrieval result
+# # prepare needed files
+# def prepare_data(dataset_name: str):
+#       # read the retrieved documents
+#       import pickle
+#       with open('./middle_products/msmarco_passage_v1_retrieved_top_tail.pkl', 'rb') as f:
+#             doc_dict = pickle.load(f)
+#             f.close()
+#       # prepare queries
+#       queries = pd.read_csv(f'./middle_products/queries_{dataset_name}.csv')
+#       # prepare res file
+#       res = pd.read_csv(f'./res/bm25_dl_{dataset_name}.csv') # retrieval result
       
-      return doc_dict, queries, res
+#       return doc_dict, queries, res
 
 if __name__=="__main__":
       if(len(sys.argv) != 8):
