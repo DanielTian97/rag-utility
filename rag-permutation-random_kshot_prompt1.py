@@ -151,7 +151,7 @@ if __name__=="__main__":
       q_no = 0
       for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
             print(f'q_number={q_no}--{qid}')
-            if(qid in existed_qids_list):
+            if(str(qid) in existed_qids_list):
                   print("Already generated, next!")
                   continue
             q_no += 1
