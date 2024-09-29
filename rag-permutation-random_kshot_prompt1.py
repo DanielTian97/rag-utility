@@ -123,32 +123,37 @@ if __name__=="__main__":
       # load needed data
       doc_dict, queries, res = prepare_data(dataset_name)
       
-      setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_settings_p_prompt1.json'
+      setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_dl_{dataset_name}_settings_p_prompt1.json'
       setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
                   'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_p_prompt1.json'
+      file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_dl_{dataset_name}_p_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
             f = open(file=file_name, mode="r")
             result_to_write = json.load(f)
             existed_qids = len(result_to_write)
+            existed_qids_list = list(result_to_write.keys())
             f.close()
       except:
             f = open(file=file_name, mode="w+")
             result_to_write= {}
             existed_qids = 0
+            existed_qids_list = []
             f.close()
 
       preamble = "Please answer this question based on the given context. End your answer with STOP."
 
       q_no = existed_qids
-      for qid, query in zip(queries['qid'].tolist()[existed_qids:], queries['query'].tolist()[existed_qids:]):
+      for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
             print(f'q_number={q_no}--{qid}')
+            if(qid in existed_qids_list):
+                  print("Already generated, next!")
+                  continue
             q_no += 1
             varying_context_result = {} #{start: results}
             
