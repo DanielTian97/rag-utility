@@ -148,7 +148,7 @@ if __name__=="__main__":
 
       preamble = "Please answer this question based on the given context. End your answer with STOP."
 
-      q_no = existed_qids
+      q_no = 0
       for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
             print(f'q_number={q_no}--{qid}')
             if(qid in existed_qids_list):
