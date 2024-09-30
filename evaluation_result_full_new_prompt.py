@@ -70,15 +70,13 @@ if __name__=="__main__":
     dataset_name = sys.argv[3]
     top_num = sys.argv[4]
     tail_num = sys.argv[5]
+    
     suffix = '_prompt1'
+    if(len(sys.argv) == 7):
+        suffix = sys.argv[6]
     
     file_path = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_num}_{tail_num}_dl_{dataset_name}{suffix}.json'
     eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_{top_num}_{tail_num}_dl_{dataset_name}{suffix}_eval.json'
-    
-    if(len(sys.argv) == 7):
-        suffix = sys.argv[6]
-        file_path = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_dl_{dataset_name}{suffix}.json'
-        eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_dl_{dataset_name}{suffix}_eval.json'
     
     # experiment begins
     bertscore = load("bertscore")
