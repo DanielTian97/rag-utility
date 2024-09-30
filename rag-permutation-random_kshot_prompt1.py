@@ -159,6 +159,7 @@ if __name__=="__main__":
             
             start_records, context_book = compose_context_with_permutations(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, \
                   top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, FULL_PERMUTATION=full_permutation)
+            print(start_records)
 
             for start, context in zip(start_records, context_book):
                   print(f'\tstart_rank.{start}')
