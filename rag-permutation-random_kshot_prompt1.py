@@ -174,3 +174,5 @@ if __name__=="__main__":
                         
             result_to_write.update({qid: varying_context_result})              
             update_json_result_file(file_name=file_name, result_to_write=result_to_write)
+            
+      del llm
