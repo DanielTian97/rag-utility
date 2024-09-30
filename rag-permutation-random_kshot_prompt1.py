@@ -115,7 +115,8 @@ if __name__=="__main__":
       top_starts = int(sys.argv[4])
       tail_starts = int(sys.argv[5])
       temperature = float(sys.argv[6])
-      full_permutation = bool(sys.argv[7])
+      full_permutation = eval(sys.argv[7])
+      print('input', full_permutation)
       dataset_name = str(sys.argv[8])
       
       # load the llm
@@ -158,8 +159,8 @@ if __name__=="__main__":
             varying_context_result = {} #{start: results}
             
             start_records, context_book = compose_context_with_permutations(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, \
-                  top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, FULL_PERMUTATION=full_permutation)
-            print(start_records)
+                  top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, full_permutations=full_permutation)
+            print('start records: ', start_records)
 
             for start, context in zip(start_records, context_book):
                   print(f'\tstart_rank.{start}')

@@ -26,13 +26,15 @@ def simple_shuffling(l: list):
         dida = not(dida)
     return shuffle_result
 
-def get_permutation(lst, p_len, FULL_PERMUTATIONS=True): # creating a user-defined method
+def get_permutation(lst, p_len, full_permutations=True): # creating a user-defined method
+
     index = range(len(lst))
     if(p_len > len(lst)):
         print("Permutation length should be less than or equal to the length of the list.")
         return []
     
-    if(FULL_PERMUTATIONS):
+    print(full_permutations)
+    if(full_permutations):
         permutations = list(itertools.permutations(index, p_len))
     else:
         # then p_len should = len(lst)

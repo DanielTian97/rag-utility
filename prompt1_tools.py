@@ -41,7 +41,7 @@ def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_star
             
     return start_rank_list, context_book
 
-def compose_context_with_permutations(res, qid: str, batch_size, batch_step, top_starts, tail_starts, doc_dict, FULL_PERMUTATION):
+def compose_context_with_permutations(res, qid: str, batch_size, batch_step, top_starts, tail_starts, doc_dict, full_permutations):
     
     print(qid)
     retrieved_for_q = res[res.qid==qid]
@@ -58,7 +58,7 @@ def compose_context_with_permutations(res, qid: str, batch_size, batch_step, top
         end = start + batch_size
         batch_docnos = retrieved_for_q[(retrieved_for_q['rank']>=start)&(retrieved_for_q['rank']<end)].docno.tolist()
 
-        permuntation_docnos = get_permutation(batch_docnos, len(batch_docnos), FULL_PERMUTATIONS=FULL_PERMUTATION)
+        permuntation_docnos = get_permutation(batch_docnos, len(batch_docnos), full_permutations=full_permutations)
             
         for p_name, p_batch_docnos in permuntation_docnos.items():
             context = ''
