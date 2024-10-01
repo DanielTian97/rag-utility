@@ -67,6 +67,7 @@ if __name__=="__main__":
             print('start records: ', start_records)
 
             for start, context in zip(start_records, context_book):
+                  llm.set_seed(1000) # added 0824
                   print(f'\tstart_rank.{start}')
                   prompt = f'{preamble} \n{context}Question: "{query}"\nNow start your answer. \nAnswer: '
                   print(prompt)
