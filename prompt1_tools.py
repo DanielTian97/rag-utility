@@ -1,5 +1,8 @@
 from permutation_generator import *
 
+def used_preamble():
+    return "You are an expert at answering questions based on your own knowledge and related context. Please answer this question based on the given context. End your answer with STOP."
+
 # prepare needed files
 def prepare_data(dataset_name: str):
     import pandas as pd
