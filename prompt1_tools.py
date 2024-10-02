@@ -7,17 +7,26 @@ def used_preamble_0():
     return "You are an expert at answering questions based on your own knowledge. Please answer this question. End your answer with STOP."
 
 # prepare needed files
-def prepare_data(dataset_name: str):
+def prepare_data(dataset_name: str, retriever_name = 'bm25'):
     import pandas as pd
     # read the retrieved documents
     import pickle
-    with open('./middle_products/msmarco_passage_v1_retrieved_top_tail.pkl', 'rb') as f:
-        doc_dict = pickle.load(f)
-        f.close()
+    
+    if(retriever_name == 'bm25'):
+        with open('./middle_products/msmarco_passage_v1_retrieved_top_tail.pkl', 'rb') as f:
+            doc_dict = pickle.load(f)
+            f.close()
+    elif('oracle' in retriever_name):
+        with open('./middle_products/msmarco_passage_v1_qrels.pkl', 'rb') as f:
+            doc_dict = pickle.load(f)
+            f.close()
+    else:
+        print('this retriever is not supported')
+        return
     # prepare queries
     queries = pd.read_csv(f'./middle_products/queries_{dataset_name}.csv')
     # prepare res file
-    res = pd.read_csv(f'./res/bm25_dl_{dataset_name}.csv') # retrieval result
+    res = pd.read_csv(f'./res/{retriever_name}_dl_{dataset_name}.csv') # retrieval result
       
     return doc_dict, queries, res
 
