@@ -20,6 +20,10 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
         with open('./middle_products/msmarco_passage_v1_qrels.pkl', 'rb') as f:
             doc_dict = pickle.load(f)
             f.close()
+    elif(retriever_name == 'mt5'):
+        with open('./middle_products/msmarco_passage_v1_retrieved_mt5.pkl', 'rb') as f:
+            doc_dict = pickle.load(f)
+            f.close()
     else:
         print('this retriever is not supported')
         return
