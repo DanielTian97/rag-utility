@@ -8,10 +8,10 @@ import sys
 from permutation_generator import *
 
 if __name__=="__main__":
-      if(len(sys.argv) != 9):
-            print("This experiment takes 8 parameters: ")
-            print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\ntemperature\nwhether_exam_full_permutations\n19/20")
-            print("e.g. 1 1 1 10 0 0.2 False")
+      if(len(sys.argv) < 10):
+            print("This experiment takes 9 parameters: ")
+            print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.whether_exam_full_permutations\n8.19/20\n9.retriever name (if not specified it will be bm25)")
+            print("e.g. 1 1 1 10 0 0.2 False 19")
 
       batch_size = int(sys.argv[1])
       batch_step = int(sys.argv[2])
@@ -24,19 +24,23 @@ if __name__=="__main__":
       print('input', full_permutation)
       dataset_name = str(sys.argv[8])
       
+      retriever_name = 'bm25'
+      if(len(sys.argv) == 10):
+            retriever_name = str(sys.argv[9])
+      
       # load the llm
       llm = llama_tools.load_llama()
       # load needed data
-      doc_dict, queries, res = prepare_data(dataset_name)
+      doc_dict, queries, res = prepare_data(dataset_name, retriever_name)
       
-      setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_dl_{dataset_name}_settings_p_prompt1.json'
+      setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_settings_p_prompt1.json'
       setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
                   'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_dl_{dataset_name}_p_prompt1.json'
+      file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_p_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
