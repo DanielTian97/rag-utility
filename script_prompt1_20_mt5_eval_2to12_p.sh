@@ -1,6 +1,4 @@
 #!/bin/sh
-python evaluation_result_full_new_prompt.py 1 5 20 1 0 _p_prompt1 mt5
-echo 'Finished bert-score evaluation for 1shot for trec-dl-20(new prompt) mt5 with pmts!'
 python evaluation_result_full_new_prompt.py 2 5 20 1 0 _p_prompt1 mt5
 echo 'Finished bert-score evaluation for 2shot for trec-dl-20(new prompt) mt5 with pmts!'
 python evaluation_result_full_new_prompt.py 3 5 20 1 0 _p_prompt1 mt5
