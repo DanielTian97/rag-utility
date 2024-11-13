@@ -4,6 +4,9 @@ In this project, we built a simple RAG pipeline, which takes retrieved raw passa
 
 #### How to use it?
 
+This code is based on the library python-cpp-python. To correctly load the model from the .GGUF, please put the project under a directory where contains a sub-directory named 
+Meta-Llama-3-8B-Instruct (with Meta-Llama-3-8B-Instruct.Q8_0.gguf in it, download link: https://huggingface.co/QuantFactory/Meta-Llama-3-8B-Instruct-GGUF). Please note, the folder named Meta-Llama-3-8B-Instruct should be outside the folder which is cloned from this repository.
+
 There are two steps, namely, generating answers and evaluating the answers, here are example commands for each of them:
 
 1. To generate: python rag-random_kshot_prompt1.py 3 1 5 10 0 0.3 19 mt5
