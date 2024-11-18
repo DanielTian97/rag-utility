@@ -21,7 +21,7 @@ def load_llama():
     print(device)
       
     llm = Llama(
-        model_path="../Meta-Llama-3-8B-Instruct/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
+        model_path="../gguf_storage/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
         logits_all=True,
         verbose=False,
         n_gpu_layers=-1, # Uncomment to use GPU acceleration
