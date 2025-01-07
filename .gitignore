@@ -1,3 +1,4 @@
 random_answers*
 .history
 *.json
+*msmarco_passage_dict.pkl
