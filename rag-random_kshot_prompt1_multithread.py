@@ -80,6 +80,7 @@ if __name__=="__main__":
                   varying_context_result.update({start: multi_call_results})
                               
             result_to_write.update({qid: varying_context_result})
+            print(type(qid))
 
       q_no = existed_qids
       
