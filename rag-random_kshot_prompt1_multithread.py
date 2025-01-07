@@ -30,6 +30,7 @@ if __name__=="__main__":
       llm = llama_tools.load_llama()
       # load needed data
       doc_dict, queries, res = prepare_data(dataset_name, retriever_name)
+      queries.qid = queries.qid.astype('str')
       query_dict = dict(zip(range(queries.shape[0]), queries.qid.values))
       
       setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
@@ -80,7 +81,6 @@ if __name__=="__main__":
                   varying_context_result.update({start: multi_call_results})
                               
             result_to_write.update({qid: varying_context_result})
-            print(type(qid))
 
       q_no = existed_qids
       
