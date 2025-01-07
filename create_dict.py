@@ -13,7 +13,6 @@ import pickle
 
 doc_dict = {}
 for i in dataset.get_corpus_iter(verbose=True):
-    print(i)
     doc_dict.update({i['docno']: i['text']})
 
 with open('./middle_products/msmarco_passage_dict.pkl', 'wb') as f:
