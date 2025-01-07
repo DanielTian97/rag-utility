@@ -56,7 +56,7 @@ if __name__=="__main__":
 
       preamble = used_preamble()
 
-      q_no = 0
+      q_no = existed_qids
       for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
             print(f'q_number={q_no}--{qid}')
             q_no += 1
