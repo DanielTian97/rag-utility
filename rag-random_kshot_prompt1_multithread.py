@@ -66,7 +66,7 @@ if __name__=="__main__":
             query = queries[queries.qid==qid]['query'].values[0]
                   
             varying_context_result = {} #{start: results}
-            print(type(batch_size), type(batch_step))
+
             start_records, context_book = compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict)
             
             for start, context in zip(start_records, context_book):
