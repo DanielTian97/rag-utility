@@ -30,9 +30,11 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
     # prepare queries
     queries = pd.read_csv(f'./middle_products/queries_{dataset_name}.csv')
     # prepare res file
-    res = pd.read_csv(f'./res/{retriever_name}_dl_{dataset_name}.csv') # retrieval result
+
     if(dataset_name=='dev_small'):
         res = pd.read_csv(f'./res/{retriever_name}_{dataset_name}.csv') # retrieval result
+    else:
+        res = pd.read_csv(f'./res/{retriever_name}_dl_{dataset_name}.csv') # retrieval result
       
     return doc_dict, queries, res
 
