@@ -47,7 +47,7 @@ def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_star
     res.qid = res.qid.astype('str')
     retrieved_for_q = res[res.qid==str(qid)]
     retrieved_num = retrieved_for_q['rank'].max()+1
-    print(retrieved_num, type(retrieved_num))
+
     starts = list(range(0, (retrieved_num-1)-(batch_size-1)+1, batch_step))
     start_rank_list = list(set(starts[:top_starts]).union(set(starts[(len(starts)-1)-(tail_starts-1):])))
     start_rank_list.sort()
