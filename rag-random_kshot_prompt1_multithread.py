@@ -68,6 +68,7 @@ if __name__=="__main__":
             varying_context_result = {} #{start: results}
 
             start_records, context_book = compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict)
+            print(type(batch_size), type(batch_step))
             for start, context in zip(start_records, context_book):
                   llm.set_seed(1000) # added 0824
                   print(f'\tstart_rank.{start}')
