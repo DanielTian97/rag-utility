@@ -29,6 +29,7 @@ if __name__=="__main__":
       llm = llama_tools.load_llama()
       # load needed data
       doc_dict, queries, res = prepare_data(dataset_name, retriever_name)
+      queries.qid = queries.qid.astype('str')
       
       setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
       setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
