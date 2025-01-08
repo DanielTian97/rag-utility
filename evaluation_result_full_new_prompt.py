@@ -6,7 +6,7 @@ import sys
 
 def prepare_qids_qrels_docdict(dataset_name):
 
-    with open('./middle_products/msmarco_passage.pkl', 'rb') as f:
+    with open('./middle_products/msmarco_passage_dict.pkl', 'rb') as f:
         doc_dict = pickle.load(f)
     
     queries = pd.read_csv(f'./middle_products/queries_{dataset_name}.csv')
