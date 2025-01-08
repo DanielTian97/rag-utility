@@ -56,6 +56,8 @@ if __name__=="__main__":
             f.close()
 
       preamble = used_preamble()
+      
+      print(existed_qids)
 
       q_no = 0
       for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
