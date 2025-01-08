@@ -12,7 +12,11 @@ def prepare_qids_qrels_docdict(dataset_name):
     queries = pd.read_csv(f'./middle_products/queries_{dataset_name}.csv')
     queries['qid'] = queries['qid'].astype('str')
     qids = queries.qid.tolist()
-    qrels = pd.read_csv('./middle_products/qrels.csv')
+    if(dataset_name=='dev_small'):
+        qrels = pd.read_csv('./middle_products/qrels_dev.csv')
+    else:
+        qrels = pd.read_csv('./middle_products/qrels.csv')
+    
     qrels['qid'] = qrels['qid'].astype('str')
     qrels['docno'] = qrels['docno'].astype('str')
     
