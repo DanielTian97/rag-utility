@@ -61,23 +61,22 @@ if __name__=="__main__":
 
       q_no = 0
       for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
-            
+            print(f'q_number={q_no}--{qid}')
             q_no += 1
             if(str(qid) not in existed_qids_list):
                   varying_context_result = {} #{start: results}
                   existing_starts = []
-                  print(f'q_number={q_no}--{qid}')
             else:
                   varying_context_result = result_to_write[str(qid)] #added 0824
                   existing_starts = list(varying_context_result.keys()) #added 0824
-                  # print(f'q_number={q_no}--{qid}')
+                  continue
                   # print(existing_starts)
 
             start_records, context_book = compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict)
             for start, context in zip(start_records, context_book):
                   llm.set_seed(1000) # added 0824
-                  if(str(start) in existing_starts):
-                        continue
+                  # if(str(start) in existing_starts):
+                  #       continue
                   print(f'\tstart_rank.{start}')
                   prompt = f'{preamble} \n{context}Question: "{query}"\nNow start your answer. \nAnswer: '
                   print(prompt)
