@@ -56,10 +56,20 @@ if __name__=="__main__":
 
       preamble = used_preamble_0()
 
-      q_no = existed_qids
+      q_no = 0
       for qid, query in zip(queries['qid'].tolist(), queries['query'].tolist()):
+            
             print(f'q_number={q_no}--{qid}')
             q_no += 1
+            
+            if(str(qid) not in existed_qids_list):
+                  print(f'q_number={q_no}--{qid}')
+                  varying_context_result = {} #{start: results}
+                  # existing_starts = []
+            else:
+                  # varying_context_result = result_to_write[str(qid)] #added 0824
+                  # existing_starts = list(varying_context_result.keys()) #added 0824
+                  continue
 
             zeroshot_result = {} #{start: results}
 
