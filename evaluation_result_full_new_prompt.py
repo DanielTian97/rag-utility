@@ -63,6 +63,12 @@ def eval_by_qrels(to_eval: str, docno_dict):
     r = {'qrel_2': r2, 'qrel_3': r3}
     return r
 
+def eval_by_qrels_1(to_eval: str, docno_dict):
+    # print(to_eval)
+    r1 = evaluator(to_eval, docno_dict, 1)
+    r = {'qrel_1': r1}
+    return r
+
 if __name__=="__main__":
     
     batch_size = int(sys.argv[1])
@@ -120,7 +126,10 @@ if __name__=="__main__":
                 to_eval = answer_book[str(qid)][str(start)][str(i)]['answer']
                 docno_dict = get_docnos(qid=qid, doc_dict=doc_dict, qrels=qrels)
 
-                r = eval_by_qrels(to_eval=to_eval, docno_dict=docno_dict)
+                if(dataset_name == 'dev_small'):
+                    r = eval_by_qrels_1(to_eval=to_eval, docno_dict=docno_dict)
+                else:
+                    r = eval_by_qrels(to_eval=to_eval, docno_dict=docno_dict)
 
                 eval_result_start.update({i: r})
             eval_result_qid.update({start: eval_result_start})
