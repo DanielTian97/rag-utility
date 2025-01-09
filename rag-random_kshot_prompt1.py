@@ -12,11 +12,11 @@ if __name__=="__main__":
             print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.19/20\n8.retriever name (if not specified it will be bm25)")
             print("e.g. 1 1 1 10 0 0.3 19 reverse_oracle")
 
-
-      batch_size = int(sys.argv[1])
+      signed_k = int(sys.argv[1])
+      batch_size = signed_k
       reverse_order = False
-      if(batch_size < 0):
-            batch_size = -batch_size
+      if(signed_k < 0):
+            batch_size = -signed_k
             reverse_order = True
       batch_step = int(sys.argv[2])
       num_calls = int(sys.argv[3])
@@ -36,14 +36,14 @@ if __name__=="__main__":
       doc_dict, queries, res = prepare_data(dataset_name, retriever_name)
       queries.qid = queries.qid.astype('str')
       
-      setting_file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
-      setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
+      setting_file_name = f'./middle_products/random_answers_{signed_k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
+      setting_record = {'batch_size':signed_k, 'batch_step':batch_step, 'num_calls':num_calls, \
                   'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1.json'
+      file_name = f'./middle_products/random_answers_{signed_k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
