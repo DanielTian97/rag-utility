@@ -42,7 +42,7 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
     return doc_dict, queries, res
 
 # compose the examples in the context part
-def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_starts, doc_dict):
+def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_starts, doc_dict, reverse_order=False):
     print(qid)
     res.qid = res.qid.astype('str')
     retrieved_for_q = res[res.qid==str(qid)]
@@ -63,6 +63,8 @@ def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_star
         end = start + batch_size
         batch_docnos = retrieved_for_q[(retrieved_for_q['rank']>=start)&(retrieved_for_q['rank']<end)].docno.tolist()
         batch_texts = [doc_dict[str(docno)] for docno in batch_docnos]
+        if(reverse_order):
+            batch_texts = list(reversed(batch_texts))
             
         num = 0
         for text in batch_texts:

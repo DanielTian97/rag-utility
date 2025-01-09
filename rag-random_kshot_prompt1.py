@@ -12,7 +12,12 @@ if __name__=="__main__":
             print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.19/20\n8.retriever name (if not specified it will be bm25)")
             print("e.g. 1 1 1 10 0 0.3 19 reverse_oracle")
 
+
       batch_size = int(sys.argv[1])
+      reverse_order = False
+      if(batch_size < 0):
+            batch_size = -batch_size
+            reverse_order = True
       batch_step = int(sys.argv[2])
       num_calls = int(sys.argv[3])
       # start control parameters
@@ -75,7 +80,7 @@ if __name__=="__main__":
                   # print(f'q_number={q_no}--{qid}')
                   # print(existing_starts)
 
-            start_records, context_book = compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict)
+            start_records, context_book = compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, reverse_order=reverse_order)
             for start, context in zip(start_records, context_book):
                   llm.set_seed(1000) # added 0824
                   # if(str(start) in existing_starts):
