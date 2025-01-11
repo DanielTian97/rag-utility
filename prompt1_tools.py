@@ -17,7 +17,7 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
             doc_dict = pickle.load(f)
             f.close()
     elif((dataset_name=='21')|(dataset_name=='22')):
-        with open('./middle_products/msmarco_passage_dict_v2.pkl', 'rb') as f:
+        with open('./middle_products/msmarco_passage_v2_dict.pkl', 'rb') as f:
             doc_dict = pickle.load(f)
             f.close()   
     else:
