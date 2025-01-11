@@ -7,7 +7,7 @@ if not pt.started():
 
 import pandas as pd
 
-dataset = pt.get_dataset('irds:msmarco-passage-2')
+dataset = pt.get_dataset('irds:msmarco-passage-v2')
 
 import pickle
 
