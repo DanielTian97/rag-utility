@@ -25,7 +25,7 @@ print(len(docnos))
 
 import pickle
 
-
+from tqdm import tqdm
 
 try:
     filename = './middle_products/msmarco_passage_v2_dict_full.pkl'
@@ -42,7 +42,7 @@ except:
         f.close()
 
 doc_dict = {}
-for qid in full_doc_dict:
+for qid in tqdm(full_doc_dict.keys()):
     doc_dict.update({qid: full_doc_dict[qid]})
 
 with open('./middle_products/msmarco_passage_v2_dict.pkl', 'wb') as f:
