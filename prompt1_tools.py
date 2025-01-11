@@ -12,24 +12,18 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
     # read the retrieved documents
     import pickle
 
-    with open('./middle_products/msmarco_passage_dict.pkl', 'rb') as f:
-        doc_dict = pickle.load(f)
-        f.close()   
-    # if(retriever_name == 'bm25'):
-    #     with open('./middle_products/msmarco_passage_v1_retrieved_top_tail.pkl', 'rb') as f:
-    #         doc_dict = pickle.load(f)
-    #         f.close()
-    # elif('oracle' in retriever_name):
-    #     with open('./middle_products/msmarco_passage_v1_qrels.pkl', 'rb') as f:
-    #         doc_dict = pickle.load(f)
-    #         f.close()
-    # elif(retriever_name == 'mt5'):
-    #     with open('./middle_products/msmarco_passage_v1_retrieved_mt5.pkl', 'rb') as f:
-    #         doc_dict = pickle.load(f)
-    #         f.close()
-    # else:
-    #     print('this retriever is not supported')
-    #     return
+    if((dataset_name=='19')|(dataset_name=='20')|(dataset_name=='dev_small')):
+        with open('./middle_products/msmarco_passage_dict.pkl', 'rb') as f:
+            doc_dict = pickle.load(f)
+            f.close()
+    elif((dataset_name=='21')|(dataset_name=='22')):
+        with open('./middle_products/msmarco_passage_dict.pkl', 'rb') as f:
+            doc_dict = pickle.load(f)
+            f.close()   
+    else:
+        print('this dataset is not supported')
+        return
+    
     # prepare queries
     queries = pd.read_csv(f'./middle_products/queries_{dataset_name}.csv')
     # prepare res file
