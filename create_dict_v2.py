@@ -25,13 +25,26 @@ print(len(docnos))
 
 import pickle
 
-doc_dict = {}
-# for i in dataset.get_corpus_iter(verbose=True):
-#     if(i['docno'] in docnos):
-#         doc_dict.update({i['docno']: i['text']})
 
-for i in dataset.get_corpus_iter(verbose=True):
-    doc_dict.update({i['docno']: i['text']})
+
+try:
+    filename = './middle_products/msmarco_passage_v2_dict_full.pkl'
+    with open('./middle_products/msmarco_passage_v2_dict_full.pkl', 'rb') as f:
+        full_doc_dict = pickle.load(f)
+        f.close()
+except:
+    full_doc_dict = {}
+    for i in dataset.get_corpus_iter(verbose=True):
+        full_doc_dict.update({i['docno']: i['text']})
+
+    with open('./middle_products/msmarco_passage_v2_dict_full.pkl', 'wb') as f:
+        pickle.dump(full_doc_dict, f)
+        f.close()
+
+doc_dict = {}
+for qid in full_doc_dict:
+    doc_dict.update({qid: full_doc_dict[qid]})
 
 with open('./middle_products/msmarco_passage_v2_dict.pkl', 'wb') as f:
     pickle.dump(doc_dict, f)
+    f.close()
