@@ -6,13 +6,19 @@ import sys
 
 def prepare_qids_qrels_docdict(dataset_name):
 
-    with open('./middle_products/msmarco_passage_dict.pkl', 'rb') as f:
-        doc_dict = pickle.load(f)
+    if(dataset_name in ['21', '22']):
+        with open('./middle_products/msmarco_passage_v2_dict.pkl', 'rb') as f:
+            doc_dict = pickle.load(f)
+    else:
+        with open('./middle_products/msmarco_passage_dict.pkl', 'rb') as f:
+            doc_dict = pickle.load(f)
     
     queries = pd.read_csv(f'./middle_products/queries_{dataset_name}.csv')
     queries['qid'] = queries['qid'].astype('str')
     qids = queries.qid.tolist()
-    if(dataset_name=='dev_small'):
+    if(dataset_name in ['21', '22']):
+        qrels = pd.read_csv('./middle_products/qrels_v2.csv')
+    elif(dataset_name=='dev_small'):
         qrels = pd.read_csv('./middle_products/qrels_dev.csv')
     else:
         qrels = pd.read_csv('./middle_products/qrels.csv')
