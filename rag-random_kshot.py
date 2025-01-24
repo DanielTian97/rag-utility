@@ -1,32 +1,39 @@
 from tools import llama_tools, experiment_tools, prompt_tools
 import json
 import sys
+import argparse
 
 if __name__=="__main__":
-      if(len(sys.argv) < 8):
-            print("This experiment takes 8 parameters: ")
-            print("1.batch size\n2.step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.19/20\n8.retriever name (if not specified it will be bm25)")
-            print("e.g. 1 1 1 10 0 0.3 19 reverse_oracle")
+      
+      parser = argparse.ArgumentParser()
+      parser.add_argument("--k", type=int, default=3)
+      parser.add_argument("--step", type=int, default=1)
+      parser.add_argument("--num_calls", type=int, default=5)
+      parser.add_argument("--tops", type=int, default=1)
+      parser.add_argument("--tails", type=int, default=0)
+      parser.add_argument("--temperature", type=float, default=0.3)
+      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22'])
+      parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'oracle', 'reverse_oracle'])
+      args = parser.parse_args()
+      
+      # if(len(sys.argv) < 8):
+      #       print("This experiment takes 8 parameters: ")
+      #       print("1.batch size\n2.step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.19/20\n8.retriever name (if not specified it will be bm25)")
+      #       print("e.g. 1 1 1 10 0 0.3 19 reverse_oracle")
 
-      signed_k = int(sys.argv[1])
-
-      step = int(sys.argv[2])
-      num_calls = int(sys.argv[3])
+      signed_k = args.k
+      step = args.step
+      num_calls = args.num_calls
       # start control parameters
-      top_starts = int(sys.argv[4])
-      tail_starts = int(sys.argv[5])
-      temperature = float(sys.argv[6])
-      dataset_name = str(sys.argv[7])
+      top_starts = args.tops
+      tail_starts = args.tails
+      temperature = args.temperature
+      dataset_name = args.dataset_name
+      retriever_name = args.retriever
       
       k = signed_k
-      reverse_order = False
-      if(signed_k < 0):
-            k = -signed_k
-            reverse_order = True
-      
-      retriever_name = 'bm25'
-      if(len(sys.argv) == 9):
-            retriever_name = str(sys.argv[8])
+      reverse_order = k<0
+      k = abs(k)
       
       # load the llm
       llm = llama_tools.load_llama()

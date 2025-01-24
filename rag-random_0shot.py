@@ -10,11 +10,6 @@ if __name__=="__main__":
       parser.add_argument("--temperature", type=float, default=0.3)
       parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22'])
       args = parser.parse_args()
-      
-      # if(len(sys.argv) < 4):
-      #       print("This experiment takes 3 parameters: ")
-      #       print("1.num of calls\n2.temperature\n3.19/20")
-      #       print("e.g. 5 0.3 19")
 
       k = 0
       step = 0
