@@ -2,7 +2,7 @@ from evaluate import load
 import pandas as pd
 import pickle
 import json
-import sys
+import argparse
 
 def prepare_qids_qrels_docdict(dataset_name):
 
@@ -81,29 +81,36 @@ def eval_by_qrels_1(to_eval: str, docno_dict):
 
 if __name__=="__main__":
     
-    batch_size = int(sys.argv[1])
-    num_calls = sys.argv[2]
-    dataset_name = sys.argv[3]
-    top_num = sys.argv[4]
-    tail_num = sys.argv[5]
-    
-    suffix = '_prompt1'
-    if(len(sys.argv) >= 7):
-        suffix = sys.argv[6]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--k", type=int, default=3)
+    parser.add_argument("--num_calls", type=int, default=5)
+    parser.add_argument("--tops", type=int, default=1)
+    parser.add_argument("--tails", type=int, default=0)
+    parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22'])
+    parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'oracle', 'reverse_oracle'])
+    parser.add_argument("--suffix", type=str, default='', choices=['', '_p'])
+    args = parser.parse_args()
+
+    k = args.k
+    num_calls = args.num_calls
+    # start control parameters
+    tops = args.tops
+    tails = args.tails
+    dataset_name = args.dataset_name
+    retriever_name = args.retriever
+    suffix = args.suffix
+    if(suffix == '_p'):
+        print('Now, the results of permutations are under evaluation!')
         
-    retriever_name = 'bm25'
-    if(len(sys.argv) >= 8):
-        retriever_name = sys.argv[7]
-        
-    file_path = f'./gen_results/random_answers_{batch_size}shot_{num_calls}calls_{top_num}_{tail_num}_{retriever_name}_dl_{dataset_name}{suffix}.json'
-    eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_{top_num}_{tail_num}_{retriever_name}_dl_{dataset_name}{suffix}_eval.json'
+    file_path = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}{suffix}_prompt1.json'
+    eval_file_path = f'./eval_results/random_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}{suffix}_prompt1_eval.json'
 
     # experiment begins
     bertscore = load("bertscore")
     # prepare data
     qids, qrels, doc_dict = prepare_qids_qrels_docdict(dataset_name)
     # read the generated answers
-    # batch_size = 1
+    # k = 1
     # num_calls = 5
 
     try:
@@ -130,7 +137,7 @@ if __name__=="__main__":
         print(f'Qid={qid}')
         eval_result_qid = {}
         for start in answer_book[str(qid)].keys():
-            print(f'\tstart={start}, batch={batch_size}')
+            print(f'\tstart={start}, batch={k}')
             eval_result_start = {}
             for i in answer_book[str(qid)][str(start)].keys():
                 print(f'\t\t{i}')

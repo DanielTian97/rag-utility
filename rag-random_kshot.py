@@ -19,8 +19,8 @@ if __name__=="__main__":
       step = args.step
       num_calls = args.num_calls
       # start control parameters
-      top_starts = args.tops
-      tail_starts = args.tails
+      tops = args.tops
+      tails = args.tails
       temperature = args.temperature
       dataset_name = args.dataset_name
       retriever_name = args.retriever
@@ -35,14 +35,14 @@ if __name__=="__main__":
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name, retriever_name)
       queries.qid = queries.qid.astype('str')
       
-      setting_file_name = f'./gen_results/random_answers_{signed_k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
+      setting_file_name = f'./gen_results/random_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
       setting_record = {'k':signed_k, 'step':step, 'num_calls':num_calls, \
-                  'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
+                  'tops':tops, 'tails':tails, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./gen_results/random_answers_{signed_k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1.json'
+      file_name = f'./gen_results/random_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
@@ -77,7 +77,7 @@ if __name__=="__main__":
                   # print(f'q_number={q_no}--{qid}')
                   # print(existing_starts)
 
-            start_records, context_book = prompt_tools.compose_context(qid=qid, res=res, k=k, step=step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, reverse_order=reverse_order)
+            start_records, context_book = prompt_tools.compose_context(qid=qid, res=res, k=k, step=step, tops=tops, tails=tails, doc_dict=doc_dict, reverse_order=reverse_order)
             for start, context in zip(start_records, context_book):
                   llm.set_seed(1000) # added 0824
                   # if(str(start) in existing_starts):
