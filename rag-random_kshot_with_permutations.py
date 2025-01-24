@@ -29,7 +29,7 @@ if __name__=="__main__":
       if(full_permutation):
             print("All possible permutations will be generated.")
       else:
-            print("Only (1) origin; (2) reversed; (3) top_ranked-in-middle; (4) top_ranked-in-2-ends; will be generated.")
+            print("Only (1) origin; (2) reversed; (3) top_ranked-in-middle; (4) top_ranked-at-2-ends; will be generated.")
       
       # load the llm
       llm = llama_tools.load_llama()
