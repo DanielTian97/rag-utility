@@ -16,7 +16,7 @@ if __name__=="__main__":
       parser.add_argument("--full_permutation", type=str, default='False', choices=['False', 'True'])
       args = parser.parse_args()
 
-      signed_k = args.k
+      k = args.k
       step = args.step
       num_calls = args.num_calls
       # start control parameters
@@ -26,8 +26,10 @@ if __name__=="__main__":
       dataset_name = args.dataset_name
       retriever_name = args.retriever
       full_permutation = eval(args.full_permutation)
-      print('input', full_permutation)
-
+      if(full_permutation):
+            print("All possible permutations will be generated.")
+      else:
+            print("Only (1) origin; (2) reversed; (3) top_ranked-in-middle; (4) top_ranked-in-2-ends; will be generated.")
       
       # load the llm
       llm = llama_tools.load_llama()
