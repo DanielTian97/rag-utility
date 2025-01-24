@@ -1,7 +1,5 @@
 from llama_cpp import Llama
-from llama_tools import llama_tools
-from experiment_tools import *
-from prompt1_tools import *
+from tools import llama_tools, experiment_tools, prompt_tools
 import json
 import sys
 
@@ -32,7 +30,7 @@ if __name__=="__main__":
       # load the llm
       llm = llama_tools.load_llama()
       # load needed data
-      doc_dict, queries, res = prepare_data(dataset_name, retriever_name)
+      doc_dict, queries, res = prompt_tools.prepare_data(dataset_name, retriever_name)
       queries.qid = queries.qid.astype('str')
       
       setting_file_name = f'./gen_results/random_answers_{signed_k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
@@ -77,13 +75,13 @@ if __name__=="__main__":
                   # print(f'q_number={q_no}--{qid}')
                   # print(existing_starts)
 
-            start_records, context_book = compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, reverse_order=reverse_order)
+            start_records, context_book = prompt_tools.compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, reverse_order=reverse_order)
             for start, context in zip(start_records, context_book):
                   llm.set_seed(1000) # added 0824
                   # if(str(start) in existing_starts):
                   #       continue
                   print(f'\tstart_rank.{start}')
-                  prompt = prompt_assembler(context, query)
+                  prompt = prompt_tools.prompt_assembler(context, query)
                   print(prompt)
                   multi_call_results = {}
                   for j in range(num_calls):
@@ -93,4 +91,4 @@ if __name__=="__main__":
                   varying_context_result.update({start: multi_call_results})
                         
             result_to_write.update({qid: varying_context_result})              
-            update_json_result_file(file_name=file_name, result_to_write=result_to_write)
+            experiment_tools.update_json_result_file(file_name=file_name, result_to_write=result_to_write)

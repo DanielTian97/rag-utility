@@ -1,7 +1,5 @@
 from llama_cpp import Llama
-from llama_tools import llama_tools
-from experiment_tools import *
-from prompt1_tools import *
+from tools import llama_tools, prompt_tools, experiment_tools
 import json
 import sys
 from permutation_generator import *
@@ -30,7 +28,7 @@ if __name__=="__main__":
       # load the llm
       llm = llama_tools.load_llama()
       # load needed data
-      doc_dict, queries, res = prepare_data(dataset_name, retriever_name)
+      doc_dict, queries, res = prompt_tools.prepare_data(dataset_name, retriever_name)
       
       setting_file_name = f'./gen_results/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_settings_p_prompt1.json'
       setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
@@ -64,14 +62,14 @@ if __name__=="__main__":
             q_no += 1
             varying_context_result = {} #{start: results}
             
-            start_records, context_book = compose_context_with_permutations(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, \
+            start_records, context_book = prompt_tools.compose_context_with_permutations(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, \
                   top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, full_permutations=full_permutation)
             print('start records: ', start_records)
 
             for start, context in zip(start_records, context_book):
                   llm.set_seed(1000) # added 0824
                   print(f'\tstart_rank.{start}')
-                  prompt = prompt_assembler(context, query)
+                  prompt = prompt_tools.prompt_assembler(context, query)
                   print(prompt)
                   multi_call_results = {}
                   varying_context_result.update({start: multi_call_results})
@@ -82,6 +80,6 @@ if __name__=="__main__":
                         multi_call_results.update({j: result})
                         
             result_to_write.update({qid: varying_context_result})              
-            update_json_result_file(file_name=file_name, result_to_write=result_to_write)
+            experiment_tools.update_json_result_file(file_name=file_name, result_to_write=result_to_write)
             
       del llm

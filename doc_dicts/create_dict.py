@@ -15,5 +15,5 @@ doc_dict = {}
 for i in dataset.get_corpus_iter(verbose=True):
     doc_dict.update({i['docno']: i['text']})
 
-with open('./doc_dicts/msmarco_passage_dict.pkl', 'wb') as f:
+with open('./msmarco_passage_dict.pkl', 'wb') as f:
     pickle.dump(doc_dict, f)

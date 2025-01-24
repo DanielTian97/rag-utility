@@ -9,9 +9,9 @@ import pandas as pd
 
 dataset = pt.get_dataset('irds:msmarco-passage-v2')
 
-res_21 = pd.read_csv('./res/bm25_dl_21.csv')
-res_22 = pd.read_csv('./res/bm25_dl_22.csv')
-qrels = pd.read_csv('./qrels/qrels_v2.csv')
+res_21 = pd.read_csv('../res/bm25_dl_21.csv')
+res_22 = pd.read_csv('../res/bm25_dl_22.csv')
+qrels = pd.read_csv('../qrels/qrels_v2.csv')
 
 docnos_21 = res_21.docno.unique()
 docnos_22 = res_22.docno.unique()
@@ -28,8 +28,8 @@ import pickle
 from tqdm import tqdm
 
 try:
-    filename = './doc_dicts/msmarco_passage_v2_dict_full.pkl'
-    with open('./doc_dicts/msmarco_passage_v2_dict_full.pkl', 'rb') as f:
+    filename = './msmarco_passage_v2_dict_full.pkl'
+    with open('./msmarco_passage_v2_dict_full.pkl', 'rb') as f:
         full_doc_dict = pickle.load(f)
         f.close()
 except:
@@ -37,7 +37,7 @@ except:
     for i in dataset.get_corpus_iter(verbose=True):
         full_doc_dict.update({i['docno']: i['text']})
 
-    with open('./doc_dicts/msmarco_passage_v2_dict_full.pkl', 'wb') as f:
+    with open('./msmarco_passage_v2_dict_full.pkl', 'wb') as f:
         pickle.dump(full_doc_dict, f)
         f.close()
 
@@ -45,6 +45,6 @@ doc_dict = {}
 for qid in tqdm(docnos):
     doc_dict.update({qid: full_doc_dict[qid]})
 
-with open('./doc_dicts/msmarco_passage_v2_dict.pkl', 'wb') as f:
+with open('./msmarco_passage_v2_dict.pkl', 'wb') as f:
     pickle.dump(doc_dict, f)
     f.close()

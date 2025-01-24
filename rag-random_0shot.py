@@ -1,24 +1,22 @@
 from llama_cpp import Llama
-from llama_tools import llama_tools
-from experiment_tools import *
-from prompt1_tools import *
+from tools import llama_tools, prompt_tools, experiment_tools
 import json
 import sys
 
 if __name__=="__main__":
       if(len(sys.argv) < 8):
-            print("This experiment takes 8 parameters: ")
-            print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.19/20\n8.retriever name (if not specified it will be bm25)")
-            print("e.g. 1 1 1 10 0 0.3 19 reverse_oracle")
+            print("This experiment takes 3 parameters: ")
+            print("1.num of calls\n2.temperature\n3.19/20")
+            print("e.g. 5 0.3 19")
 
-      batch_size = int(sys.argv[1]) #set to 0
-      batch_step = int(sys.argv[2]) #set to 0
-      num_calls = int(sys.argv[3])
+      batch_size = 0
+      batch_step = 0
+      num_calls = int(sys.argv[1])
       # start control parameters
-      top_starts = int(sys.argv[4]) #set to 0
-      tail_starts = int(sys.argv[5]) #set to 0
-      temperature = float(sys.argv[6])
-      dataset_name = str(sys.argv[7])
+      top_starts = 0
+      tail_starts = 0
+      temperature = float(sys.argv[2])
+      dataset_name = str(sys.argv[3])
       
       retriever_name = 'bm25'
       if(len(sys.argv) == 9):
@@ -27,7 +25,7 @@ if __name__=="__main__":
       # load the llm
       llm = llama_tools.load_llama()
       # load needed data
-      doc_dict, queries, res = prepare_data(dataset_name)
+      doc_dict, queries, res = prompt_tools.prepare_data(dataset_name)
       
       setting_file_name = f'./gen_results/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
       setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
@@ -73,7 +71,7 @@ if __name__=="__main__":
             # for start, context in zip(start_records, context_book):
             llm.set_seed(1000) # added 0824
 
-            prompt = prompt_assembler_0(query)
+            prompt = prompt_tools.prompt_assembler_0(query)
             print(prompt)
             multi_call_results = {}
             for j in range(num_calls):
@@ -83,4 +81,4 @@ if __name__=="__main__":
             zeroshot_result.update({'0': multi_call_results})
                         
             result_to_write.update({qid: zeroshot_result})              
-            update_json_result_file(file_name=file_name, result_to_write=result_to_write)
+            experiment_tools.update_json_result_file(file_name=file_name, result_to_write=result_to_write)

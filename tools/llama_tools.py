@@ -25,8 +25,7 @@ def load_llama():
         logits_all=True,
         verbose=False,
         n_gpu_layers=-1, # Uncomment to use GPU acceleration
-        # n_ctx=2048, # Uncomment to increase the context window
-        n_ctx=4000, # temporarily change to 3000
+        n_ctx=4000, # temporarily change to 4000
     )
 
     llm.set_seed(1000)
