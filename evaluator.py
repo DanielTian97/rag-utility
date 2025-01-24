@@ -96,6 +96,8 @@ if __name__=="__main__":
     # start control parameters
     tops = args.tops
     tails = args.tails
+    if(k==0):
+        tops, tails = 0, 0
     dataset_name = args.dataset_name
     retriever_name = args.retriever
     suffix = args.suffix
