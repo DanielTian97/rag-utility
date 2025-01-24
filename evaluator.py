@@ -96,10 +96,10 @@ if __name__=="__main__":
     # start control parameters
     tops = args.tops
     tails = args.tails
-    if(k==0):
-        tops, tails = 0, 0
     dataset_name = args.dataset_name
     retriever_name = args.retriever
+    if(k==0):
+        tops, tails, retriever = 0, 0, 'bm25'
     suffix = args.suffix
     if(suffix == '_p'):
         print('Now, the results of permutations are under evaluation!')
