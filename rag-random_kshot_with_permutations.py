@@ -7,11 +7,11 @@ from permutation_generator import *
 if __name__=="__main__":
       if(len(sys.argv) < 10):
             print("This experiment takes 9 parameters: ")
-            print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.whether_exam_full_permutations\n8.19/20\n9.retriever name (if not specified it will be bm25)")
+            print("1.number of context passages\n2.step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.whether_exam_full_permutations\n8.19/20\n9.retriever name (if not specified it will be bm25)")
             print("e.g. 1 1 1 10 0 0.2 False 19")
 
-      batch_size = int(sys.argv[1])
-      batch_step = int(sys.argv[2])
+      k = int(sys.argv[1])
+      step = int(sys.argv[2])
       num_calls = int(sys.argv[3])
       # start control parameters
       top_starts = int(sys.argv[4])
@@ -30,14 +30,14 @@ if __name__=="__main__":
       # load needed data
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name, retriever_name)
       
-      setting_file_name = f'./gen_results/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_settings_p_prompt1.json'
-      setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
+      setting_file_name = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_settings_p_prompt1.json'
+      setting_record = {'k':k, 'step':step, 'num_calls':num_calls, \
                   'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./gen_results/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_p_prompt1.json'
+      file_name = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_p_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
@@ -62,7 +62,7 @@ if __name__=="__main__":
             q_no += 1
             varying_context_result = {} #{start: results}
             
-            start_records, context_book = prompt_tools.compose_context_with_permutations(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, \
+            start_records, context_book = prompt_tools.compose_context_with_permutations(qid=qid, res=res, k=k, step=step, \
                   top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, full_permutations=full_permutation)
             print('start records: ', start_records)
 

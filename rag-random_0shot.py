@@ -9,8 +9,8 @@ if __name__=="__main__":
             print("1.num of calls\n2.temperature\n3.19/20")
             print("e.g. 5 0.3 19")
 
-      batch_size = 0
-      batch_step = 0
+      k = 0
+      step = 0
       num_calls = int(sys.argv[1])
       # start control parameters
       top_starts = 0
@@ -27,14 +27,14 @@ if __name__=="__main__":
       # load needed data
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name)
       
-      setting_file_name = f'./gen_results/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
-      setting_record = {'batch_size':batch_size, 'batch_step':batch_step, 'num_calls':num_calls, \
+      setting_file_name = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
+      setting_record = {'k':k, 'step':step, 'num_calls':num_calls, \
                   'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./gen_results/random_answers_{batch_size}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1.json'
+      file_name = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
@@ -67,7 +67,7 @@ if __name__=="__main__":
 
             zeroshot_result = {} #{start: results}
 
-            # start_records, context_book = compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict)
+            # start_records, context_book = compose_context(qid=qid, res=res, k=k, step=step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict)
             # for start, context in zip(start_records, context_book):
             llm.set_seed(1000) # added 0824
 

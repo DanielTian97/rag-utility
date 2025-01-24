@@ -6,16 +6,16 @@ import sys
 if __name__=="__main__":
       if(len(sys.argv) < 8):
             print("This experiment takes 8 parameters: ")
-            print("1.batch size\n2.batch step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.19/20\n8.retriever name (if not specified it will be bm25)")
+            print("1.batch size\n2.step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.19/20\n8.retriever name (if not specified it will be bm25)")
             print("e.g. 1 1 1 10 0 0.3 19 reverse_oracle")
 
       signed_k = int(sys.argv[1])
-      batch_size = signed_k
+      k = signed_k
       reverse_order = False
       if(signed_k < 0):
-            batch_size = -signed_k
+            k = -signed_k
             reverse_order = True
-      batch_step = int(sys.argv[2])
+      step = int(sys.argv[2])
       num_calls = int(sys.argv[3])
       # start control parameters
       top_starts = int(sys.argv[4])
@@ -34,7 +34,7 @@ if __name__=="__main__":
       queries.qid = queries.qid.astype('str')
       
       setting_file_name = f'./gen_results/random_answers_{signed_k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
-      setting_record = {'batch_size':signed_k, 'batch_step':batch_step, 'num_calls':num_calls, \
+      setting_record = {'k':signed_k, 'step':step, 'num_calls':num_calls, \
                   'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
@@ -75,7 +75,7 @@ if __name__=="__main__":
                   # print(f'q_number={q_no}--{qid}')
                   # print(existing_starts)
 
-            start_records, context_book = prompt_tools.compose_context(qid=qid, res=res, batch_size=batch_size, batch_step=batch_step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, reverse_order=reverse_order)
+            start_records, context_book = prompt_tools.compose_context(qid=qid, res=res, k=k, step=step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict, reverse_order=reverse_order)
             for start, context in zip(start_records, context_book):
                   llm.set_seed(1000) # added 0824
                   # if(str(start) in existing_starts):
