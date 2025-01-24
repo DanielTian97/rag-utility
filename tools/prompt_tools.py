@@ -36,7 +36,7 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
     return doc_dict, queries, res
 
 # compose the examples in the context part
-def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_starts, doc_dict, reverse_order=False):
+def compose_context(res, qid: str, k, batch_step, top_starts, tail_starts, doc_dict, reverse_order=False):
     print(qid)
     res.qid = res.qid.astype('str')
     retrieved_for_q = res[res.qid==str(qid)]
@@ -44,7 +44,7 @@ def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_star
     retrieved_num = retrieved_for_q['rank'].max()+1
 
     try:
-        starts = list(range(0, (retrieved_num-1)-(batch_size-1)+1, batch_step))
+        starts = list(range(0, (retrieved_num-1)-(k-1)+1, batch_step))
     except:
         starts = []
         
@@ -54,7 +54,7 @@ def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_star
     context_book = []
     for start in start_rank_list:
         context = ''
-        end = start + batch_size
+        end = start + k
         batch_docnos = retrieved_for_q[(retrieved_for_q['rank']>=start)&(retrieved_for_q['rank']<end)].docno.tolist()
         batch_texts = [doc_dict[str(docno)] for docno in batch_docnos]
         if(reverse_order):
@@ -69,13 +69,13 @@ def compose_context(res, qid: str, batch_size, batch_step, top_starts, tail_star
             
     return start_rank_list, context_book
 
-def compose_context_with_permutations(res, qid: str, batch_size, batch_step, top_starts, tail_starts, doc_dict, full_permutations):
+def compose_context_with_permutations(res, qid: str, k, batch_step, top_starts, tail_starts, doc_dict, full_permutations):
     
     print(qid)
     retrieved_for_q = res[res.qid==qid]
     retrieved_num = retrieved_for_q['rank'].max()+1
       
-    starts = list(range(0, (retrieved_num-1)-(batch_size-1)+1, batch_step))
+    starts = list(range(0, (retrieved_num-1)-(k-1)+1, batch_step))
     start_rank_list = list(set(starts[:top_starts]).union(set(starts[(len(starts)-1)-(tail_starts-1):])))
     print(start_rank_list)
     start_rank_list.sort()
@@ -83,7 +83,7 @@ def compose_context_with_permutations(res, qid: str, batch_size, batch_step, top
     p_name_list = []
     context_book = []
     for start in start_rank_list:
-        end = start + batch_size
+        end = start + k
         batch_docnos = retrieved_for_q[(retrieved_for_q['rank']>=start)&(retrieved_for_q['rank']<end)].docno.tolist()
 
         permuntation_docnos = get_permutation(batch_docnos, len(batch_docnos), full_permutations=full_permutations)
