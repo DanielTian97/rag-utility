@@ -106,9 +106,12 @@ if __name__=="__main__":
     # batch_size = 1
     # num_calls = 5
 
-    with open(file=file_path, mode="r") as f:
+    try:
+        f = open(file=file_path, mode="r")
         answer_book = json.load(f)
         f.close()
+    except:
+        print(f'Answer book {file_path} does not exist.')
     
     # create the file
     try:
