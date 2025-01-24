@@ -14,8 +14,8 @@ if __name__=="__main__":
       step = 0
       num_calls = args.num_calls
       # start control parameters
-      top_starts = 0
-      tail_starts = 0
+      tops = 0
+      tails = 0
       temperature = args.temperature
       dataset_name = args.dataset_name
       retriever_name = 'bm25'
@@ -25,14 +25,14 @@ if __name__=="__main__":
       # load needed data
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name)
       
-      setting_file_name = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
+      setting_file_name = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
       setting_record = {'k':k, 'step':step, 'num_calls':num_calls, \
-                  'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
+                  'tops':tops, 'tails':tails, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1.json'
+      file_name = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
@@ -65,7 +65,7 @@ if __name__=="__main__":
 
             zeroshot_result = {} #{start: results}
 
-            # start_records, context_book = compose_context(qid=qid, res=res, k=k, step=step, top_starts=top_starts, tail_starts=tail_starts, doc_dict=doc_dict)
+            # start_records, context_book = compose_context(qid=qid, res=res, k=k, step=step, tops=tops, tails=tails, doc_dict=doc_dict)
             # for start, context in zip(start_records, context_book):
             llm.set_seed(1000) # added 0824
 
