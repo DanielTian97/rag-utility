@@ -36,7 +36,7 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
     return doc_dict, queries, res
 
 # compose the examples in the context part
-def compose_context(res, qid: str, k, batch_step, top_starts, tail_starts, doc_dict, reverse_order=False):
+def compose_context(res, qid: str, k, step, top_starts, tail_starts, doc_dict, reverse_order=False):
     print(qid)
     res.qid = res.qid.astype('str')
     retrieved_for_q = res[res.qid==str(qid)]
@@ -44,7 +44,7 @@ def compose_context(res, qid: str, k, batch_step, top_starts, tail_starts, doc_d
     retrieved_num = retrieved_for_q['rank'].max()+1
 
     try:
-        starts = list(range(0, (retrieved_num-1)-(k-1)+1, batch_step))
+        starts = list(range(0, (retrieved_num-1)-(k-1)+1, step))
     except:
         starts = []
         
@@ -69,13 +69,13 @@ def compose_context(res, qid: str, k, batch_step, top_starts, tail_starts, doc_d
             
     return start_rank_list, context_book
 
-def compose_context_with_permutations(res, qid: str, k, batch_step, top_starts, tail_starts, doc_dict, full_permutations):
+def compose_context_with_permutations(res, qid: str, k, step, top_starts, tail_starts, doc_dict, full_permutations):
     
     print(qid)
     retrieved_for_q = res[res.qid==qid]
     retrieved_num = retrieved_for_q['rank'].max()+1
       
-    starts = list(range(0, (retrieved_num-1)-(k-1)+1, batch_step))
+    starts = list(range(0, (retrieved_num-1)-(k-1)+1, step))
     start_rank_list = list(set(starts[:top_starts]).union(set(starts[(len(starts)-1)-(tail_starts-1):])))
     print(start_rank_list)
     start_rank_list.sort()
