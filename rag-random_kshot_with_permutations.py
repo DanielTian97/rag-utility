@@ -1,28 +1,33 @@
 from tools import llama_tools, prompt_tools, experiment_tools
 import json
-import sys
-from permutation_generator import *
+import argparse
 
 if __name__=="__main__":
-      if(len(sys.argv) < 10):
-            print("This experiment takes 9 parameters: ")
-            print("1.number of context passages\n2.step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.whether_exam_full_permutations\n8.19/20\n9.retriever name (if not specified it will be bm25)")
-            print("e.g. 1 1 1 10 0 0.2 False 19")
-
-      k = int(sys.argv[1])
-      step = int(sys.argv[2])
-      num_calls = int(sys.argv[3])
-      # start control parameters
-      top_starts = int(sys.argv[4])
-      tail_starts = int(sys.argv[5])
-      temperature = float(sys.argv[6])
-      full_permutation = eval(sys.argv[7])
-      print('input', full_permutation)
-      dataset_name = str(sys.argv[8])
       
-      retriever_name = 'bm25'
-      if(len(sys.argv) == 10):
-            retriever_name = str(sys.argv[9])
+      parser = argparse.ArgumentParser()
+      parser.add_argument("--k", type=int, default=3)
+      parser.add_argument("--step", type=int, default=1)
+      parser.add_argument("--num_calls", type=int, default=5)
+      parser.add_argument("--tops", type=int, default=1)
+      parser.add_argument("--tails", type=int, default=0)
+      parser.add_argument("--temperature", type=float, default=0.3)
+      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22'])
+      parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'oracle', 'reverse_oracle'])
+      parser.add_argument("--full_permutation", type=str, default='False', choices=['False', 'True'])
+      args = parser.parse_args()
+
+      signed_k = args.k
+      step = args.step
+      num_calls = args.num_calls
+      # start control parameters
+      top_starts = args.tops
+      tail_starts = args.tails
+      temperature = args.temperature
+      dataset_name = args.dataset_name
+      retriever_name = args.retriever
+      full_permutation = eval(args.full_permutation)
+      print('input', full_permutation)
+
       
       # load the llm
       llm = llama_tools.load_llama()

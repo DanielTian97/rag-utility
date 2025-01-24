@@ -1,6 +1,5 @@
 from tools import llama_tools, experiment_tools, prompt_tools
 import json
-import sys
 import argparse
 
 if __name__=="__main__":
@@ -15,11 +14,6 @@ if __name__=="__main__":
       parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22'])
       parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'oracle', 'reverse_oracle'])
       args = parser.parse_args()
-      
-      # if(len(sys.argv) < 8):
-      #       print("This experiment takes 8 parameters: ")
-      #       print("1.batch size\n2.step\n3.num of calls\n4.top of starts\n5.tail of starts\n6.temperature\n7.19/20\n8.retriever name (if not specified it will be bm25)")
-      #       print("e.g. 1 1 1 10 0 0.3 19 reverse_oracle")
 
       signed_k = args.k
       step = args.step

@@ -1,6 +1,5 @@
 from tools import llama_tools, prompt_tools, experiment_tools
 import json
-import sys
 import argparse
 
 if __name__=="__main__":
@@ -19,10 +18,7 @@ if __name__=="__main__":
       tail_starts = 0
       temperature = args.temperature
       dataset_name = args.dataset_name
-      
       retriever_name = 'bm25'
-      if(len(sys.argv) == 9):
-            retriever_name = str(sys.argv[8])
       
       # load the llm
       llm = llama_tools.load_llama()
