@@ -7,7 +7,7 @@ if __name__=="__main__":
       parser = argparse.ArgumentParser()
       parser.add_argument("--num_calls", type=int, default=5)
       parser.add_argument("--temperature", type=float, default=0.3)
-      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22'])
+      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small'])
       args = parser.parse_args()
 
       k = 0

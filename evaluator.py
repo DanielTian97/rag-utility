@@ -86,7 +86,7 @@ if __name__=="__main__":
     parser.add_argument("--num_calls", type=int, default=5)
     parser.add_argument("--tops", type=int, default=1)
     parser.add_argument("--tails", type=int, default=0)
-    parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22'])
+    parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small'])
     parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'oracle', 'reverse_oracle'])
     parser.add_argument("--suffix", type=str, default='', choices=['', '_p'])
     args = parser.parse_args()
@@ -109,16 +109,15 @@ if __name__=="__main__":
     bertscore = load("bertscore")
     # prepare data
     qids, qrels, doc_dict = prepare_qids_qrels_docdict(dataset_name)
+    
     # read the generated answers
-    # k = 1
-    # num_calls = 5
-
     try:
         f = open(file=file_path, mode="r")
         answer_book = json.load(f)
         f.close()
     except:
         print(f'Answer book {file_path} does not exist.')
+        answer_book = {}
     
     # create the file
     try:
