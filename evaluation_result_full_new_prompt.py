@@ -7,21 +7,21 @@ import sys
 def prepare_qids_qrels_docdict(dataset_name):
 
     if(dataset_name in ['21', '22']):
-        with open('./middle_products/msmarco_passage_v2_dict.pkl', 'rb') as f:
+        with open('./doc_dicts/msmarco_passage_v2_dict.pkl', 'rb') as f:
             doc_dict = pickle.load(f)
     else:
-        with open('./middle_products/msmarco_passage_dict.pkl', 'rb') as f:
+        with open('./doc_dicts/msmarco_passage_dict.pkl', 'rb') as f:
             doc_dict = pickle.load(f)
     
-    queries = pd.read_csv(f'./middle_products/queries_{dataset_name}.csv')
+    queries = pd.read_csv(f'./queries/queries_{dataset_name}.csv')
     queries['qid'] = queries['qid'].astype('str')
     qids = queries.qid.tolist()
     if(dataset_name in ['21', '22']):
-        qrels = pd.read_csv('./middle_products/qrels_v2.csv')
+        qrels = pd.read_csv('./qrels/qrels_v2.csv')
     elif(dataset_name=='dev_small'):
-        qrels = pd.read_csv('./middle_products/qrels_dev.csv')
+        qrels = pd.read_csv('./qrels/qrels_dev.csv')
     else:
-        qrels = pd.read_csv('./middle_products/qrels.csv')
+        qrels = pd.read_csv('./qrels/qrels.csv')
     
     qrels['qid'] = qrels['qid'].astype('str')
     qrels['docno'] = qrels['docno'].astype('str')
@@ -92,12 +92,12 @@ if __name__=="__main__":
         suffix = sys.argv[6]
         
     retriever_name = 'bm25'
-    file_path = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_num}_{tail_num}_dl_{dataset_name}{suffix}.json'
+    file_path = f'./gen_results/random_answers_{batch_size}shot_{num_calls}calls_{top_num}_{tail_num}_dl_{dataset_name}{suffix}.json'
     eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_{top_num}_{tail_num}_dl_{dataset_name}{suffix}_eval.json'
     
     if(len(sys.argv) >= 8):
         retriever_name = sys.argv[7]
-        file_path = f'./middle_products/random_answers_{batch_size}shot_{num_calls}calls_{top_num}_{tail_num}_{retriever_name}_dl_{dataset_name}{suffix}.json'
+        file_path = f'./gen_results/random_answers_{batch_size}shot_{num_calls}calls_{top_num}_{tail_num}_{retriever_name}_dl_{dataset_name}{suffix}.json'
         eval_file_path = f'./eval_results/random_answers_{batch_size}shot_{num_calls}calls_{top_num}_{tail_num}_{retriever_name}_dl_{dataset_name}{suffix}_eval.json'
 
     # experiment begins

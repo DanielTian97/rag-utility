@@ -36,14 +36,14 @@ if __name__=="__main__":
       doc_dict, queries, res = prepare_data(dataset_name, retriever_name)
       queries.qid = queries.qid.astype('str')
       
-      setting_file_name = f'./middle_products/random_answers_{signed_k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
+      setting_file_name = f'./gen_results/random_answers_{signed_k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
       setting_record = {'batch_size':signed_k, 'batch_step':batch_step, 'num_calls':num_calls, \
                   'top_starts':top_starts, 'tail_starts':tail_starts, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./middle_products/random_answers_{signed_k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1.json'
+      file_name = f'./gen_results/random_answers_{signed_k}shot_{num_calls}calls_{top_starts}_{tail_starts}_{retriever_name}_dl_{dataset_name}_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
@@ -59,8 +59,6 @@ if __name__=="__main__":
             existed_qids_list = []
             existed_qids = 0
             f.close()
-
-      preamble = used_preamble()
       
       print(existed_qids)
 
@@ -86,7 +84,7 @@ if __name__=="__main__":
                   # if(str(start) in existing_starts):
                   #       continue
                   print(f'\tstart_rank.{start}')
-                  prompt = f'{preamble} \n{context}Question: "{query}"\nNow start your answer. \nAnswer: '
+                  prompt = prompt_assembler(context, query)
                   print(prompt)
                   multi_call_results = {}
                   for j in range(num_calls):

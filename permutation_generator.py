@@ -1,12 +1,5 @@
 import itertools
 
-# def get_combinations(lst): # creating a user-defined method
-#    combination = [] # empty list 
-#    for r in range(1, len(lst) + 1):
-#       # to generate combination
-#       combination.extend(itertools.combinations(lst, r))
-#    return combination
-
 def construct_p_name(l):
     name = ''
     for i in l:

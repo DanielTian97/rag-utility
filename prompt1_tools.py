@@ -1,9 +1,9 @@
 from permutation_generator import *
 
-def used_preamble():
+def used_preamble(): # for k-shot
     return "You are an expert at answering questions based on your own knowledge and related context. Please answer this question based on the given context. End your answer with STOP."
 
-def used_preamble_0():
+def used_preamble_0(): # for 0-shot
     return "You are an expert at answering questions based on your own knowledge. Please answer this question. End your answer with STOP."
 
 # prepare needed files
@@ -13,11 +13,11 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
     import pickle
 
     if((dataset_name=='19')|(dataset_name=='20')|(dataset_name=='dev_small')):
-        with open('./middle_products/msmarco_passage_dict.pkl', 'rb') as f:
+        with open('./doc_dicts/msmarco_passage_dict.pkl', 'rb') as f:
             doc_dict = pickle.load(f)
             f.close()
     elif((dataset_name=='21')|(dataset_name=='22')):
-        with open('./middle_products/msmarco_passage_v2_dict.pkl', 'rb') as f:
+        with open('./doc_dicts/msmarco_passage_v2_dict.pkl', 'rb') as f:
             doc_dict = pickle.load(f)
             f.close()   
     else:
@@ -25,7 +25,7 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
         return
     
     # prepare queries
-    queries = pd.read_csv(f'./middle_products/queries_{dataset_name}.csv')
+    queries = pd.read_csv(f'./queries/queries_{dataset_name}.csv')
     # prepare res file
 
     if(dataset_name=='dev_small'):
@@ -101,3 +101,11 @@ def compose_context_with_permutations(res, qid: str, batch_size, batch_step, top
             context_book.append(context)
             
     return p_name_list, context_book
+
+def prompt_assembler_0(query:str):
+    preamble = used_preamble_0()
+    return f'{preamble} \nQuestion: "{query}"\nNow start your answer. \nAnswer: '
+
+def prompt_assembler(context:str, query:str):
+    preamble = used_preamble()
+    return f'{preamble} \n{context}Question: "{query}"\nNow start your answer. \nAnswer: '
