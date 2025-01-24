@@ -87,7 +87,7 @@ if __name__=="__main__":
     parser.add_argument("--tops", type=int, default=1)
     parser.add_argument("--tails", type=int, default=0)
     parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small'])
-    parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'oracle', 'reverse_oracle'])
+    parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'oracle', 'reverse_oracle'])
     parser.add_argument("--suffix", type=str, default='', choices=['', '_p'])
     args = parser.parse_args()
 
