@@ -1,4 +1,3 @@
-from llama_cpp import Llama
 from tools import llama_tools, experiment_tools, prompt_tools
 import json
 import sys
@@ -10,11 +9,7 @@ if __name__=="__main__":
             print("e.g. 1 1 1 10 0 0.3 19 reverse_oracle")
 
       signed_k = int(sys.argv[1])
-      k = signed_k
-      reverse_order = False
-      if(signed_k < 0):
-            k = -signed_k
-            reverse_order = True
+
       step = int(sys.argv[2])
       num_calls = int(sys.argv[3])
       # start control parameters
@@ -22,6 +17,12 @@ if __name__=="__main__":
       tail_starts = int(sys.argv[5])
       temperature = float(sys.argv[6])
       dataset_name = str(sys.argv[7])
+      
+      k = signed_k
+      reverse_order = False
+      if(signed_k < 0):
+            k = -signed_k
+            reverse_order = True
       
       retriever_name = 'bm25'
       if(len(sys.argv) == 9):

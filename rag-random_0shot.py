@@ -1,22 +1,29 @@
-from llama_cpp import Llama
 from tools import llama_tools, prompt_tools, experiment_tools
 import json
 import sys
+import argparse
 
 if __name__=="__main__":
-      if(len(sys.argv) < 8):
-            print("This experiment takes 3 parameters: ")
-            print("1.num of calls\n2.temperature\n3.19/20")
-            print("e.g. 5 0.3 19")
+      
+      parser = argparse.ArgumentParser()
+      parser.add_argument("--num_calls", type=int, default=5)
+      parser.add_argument("--temperature", type=float, default=0.3)
+      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22'])
+      args = parser.parse_args()
+      
+      # if(len(sys.argv) < 4):
+      #       print("This experiment takes 3 parameters: ")
+      #       print("1.num of calls\n2.temperature\n3.19/20")
+      #       print("e.g. 5 0.3 19")
 
       k = 0
       step = 0
-      num_calls = int(sys.argv[1])
+      num_calls = args.num_calls
       # start control parameters
       top_starts = 0
       tail_starts = 0
-      temperature = float(sys.argv[2])
-      dataset_name = str(sys.argv[3])
+      temperature = args.temperature
+      dataset_name = args.dataset_name
       
       retriever_name = 'bm25'
       if(len(sys.argv) == 9):
