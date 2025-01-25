@@ -1,0 +1,134 @@
+; Note: I have tried to keep this to the width of one page on a laptop screen. If the text appears wider than 
+; the page, please select "View" in Notepad and switch off "Word Wrap".
+
+-------------------------------------------------------------------------------------------------------------
+
+; ALGORITHM IN HIGH-LEVEL LANGUAGE (JAVA)
+
+; Outputs:(1) negsum: 2's complement integer giving the sum of all negative elements in X
+;	  (2) pzcount: count of the number of elements in X 
+;	  (3) oddcount: count of the odd, non-negtive elements in X
+;	  (4) overflow: 2's complement integer (boolean 1 or 0) indicating whether an overflow has occurred 
+
+; public class Array {
+; public static void main(String[] args) {
+		
+;	int n = 12;			// Initialising the variables and constants:
+;	int i = 0;			// 0 is not declared as a constant here because in Sigma 16 
+;	int negsum = 0;			// register R0 automatically gives you 0.
+;	int pzcount = 0;		// 1 and -1 are also not declared here because it would be less		
+;	int oddcount = 0;		// efficient in Java to declare constants 1 and -1 for this program.
+
+;	int[] X = new int[n]; 		// The array created is based on the developer acceptance test.
+;	X[0] = 3;
+;	X[1] = -6;
+;	X[2] = 27;
+;	X[3] = 101;
+;	X[4] = 50;
+;	X[5] = 0;
+;	X[6] = -20;
+;	X[7] = -21;
+;	X[8] = 19;
+;	X[9] = 6;
+;	X[10] = 4;
+;	X[11] = -10;
+		
+;	boolean overflow = false;	// This will function differently in Java because the min value is
+;					// not set to -32768, as it is in a 16-bit 2's complement array.
+
+;	for(int i=0; i<n; i++) {	// Main loop
+;		if(X[i]<0) {				
+;			negsum += X[i];		// This function is called "neg" in my Sigma 16 program.
+;			if(negsum>-1) {
+;				overflow = true;	
+;			}				
+;		} else {						
+;			pzcount++;		// This function is called "pos" in my Sigma 16 program.
+;			if(X[i]%2!=0) {		// I first used div and R15 in my Sigma 16 program but have
+;			oddcount++;		// used "and" as a more efficient way of checking oddness.
+;			}
+;		} 
+;	}
+;	System.out.println("negsum = " + negsum);	// These print statements are designed to mimic the
+;	System.out.println("pzcount = " + pzcount);	// the Sigma 16 program "storing" the values
+;	System.out.println("oddcount = " + oddcount);	// of each variable at the end of the program. 
+; }
+; }
+
+-------------------------------------------------------------------------------------------------------------
+
+; SIGMA 16 PROGRAM
+
+; Developer acceptance test (see the Data Area below):
+;	This program passes the developer acceptance test in 134 instructions (including trap).
+;	It returns the following:	Negsum = -57 = $ffc7 
+;					Overflow = $0000
+;					Pzcount = 8 = $0008
+;					Oddcount = 4 = $0004
+
+	
+; Use of register variables and constants:
+;	R1 = 1 (constant)
+;	R2 = n (variable)
+;	R3 = i (variable growing by 1 at each iteration)
+;	R4 temporary boolean (check whether i < n)
+;	R5 = x[i] (variable)
+;	R6 negsum (initialised to 0)
+;	R7 pzcount (initialised to 0)
+;	R8 oddcount (initialised to 0)
+;	R9 temporary boolean (check whether x[i] < 0)
+;	R10 = -1 (constant)
+; 	R11 temporary boolean (check for overflow each time negsum is calculated)
+; 	R12 temporary boolean (check whether LSB of x[i] is 1, i.e. whether x[i] is odd)	
+
+; Initialisation:
+
+	lea R1,1[R0]	; constant 1
+	load R2,n[R0]	; variable n
+	lea R3,0[R0]	; variable i 
+	lea R10,-1[R0]	; constant -1
+
+; Main loop for (i=0; i<n; i++):
+	
+loop	cmplt R4,R3,R2		; check whether i is less than n
+	jumpf R4,done[R0]	; if i > n, then we have reached the end of array X. Jump to "done"
+	load R5,x[R3]		; R5 = x[i]
+	cmplt R9,R5,R0		; check whether x[i] < 0, i.e. whether it is a negative number
+	jumpf R9,pos[R0]	; jump to "pos" block if x[i] is non-negative
+
+neg	add R6,R6,R5		; R6 = negsum + x[i]
+	cmpgt R11,R6,R10	; check for overflow: output = 1 if R6 (negsum) is non-negative (> -1)
+	jump next[R0]		; jump to "next" 
+
+pos	add R7,R7,R1		; R9 told us x[i] must be non-negative, so add 1 to R7 (pzcount)
+	and R12,R5,R1		; check whether LSB of x[i] is 1 (more efficient than checking mod in R15)
+	jumpf R12,next[R0]	; if x{i] is not odd, jump to "next" 
+	add R8,R8,R1		; temporary boolean R11 tells us x[i] is odd, so add 1 to R8 (oddcount)
+
+next	add R3,R3,R1		; x[i] has now been tested, so move on to i = i + 1
+	jump loop[R0]		; back to the start of the loop to move on to x[i+1]
+	
+done	store R6,negsum[R0]	; store negsum
+	store R7,pzcount[R0]	; store pzcount
+	store R8,oddcount[R0]	; store oddcount
+	trap R0,R0,R0		; terminate
+	
+; Data Area 
+; This is the data from the developer acceptance test
+
+n		data	12	
+negsum		data	0
+pzcount		data	0
+oddcount	data	0
+x		data 	3	; x[0]
+		data	-6 	; x[1]
+		data	27 	; x[2]
+		data	101 	; x[3]
+		data	50 	; x[4]
+		data	0 	; x[5]
+		data	-20 	; x[6]
+		data	-21 	; x[7]
+		data	19 	; x[8]	
+		data	6 	; x[9]
+		data	4 	; x[10]
+		data	-10 	; x[11]
