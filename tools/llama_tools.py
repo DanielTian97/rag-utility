@@ -40,7 +40,8 @@ def single_call(llm, prompt, temperature):
                   
     answer = output['choices'][0]['text']
                   
-    result = {"answer": answer, "prob_seq": float(prob_seq)}
+    result = {"answer": answer, "prob_seq": float(prob_seq), "probs": token_logprobs}
+    
     return result
 
 def testtesttest():
