@@ -70,6 +70,9 @@ if __name__=="__main__":
             if(str(qid) not in existed_qids_list):
                   varying_context_result = {} #{start: results}
                   # existing_starts = []
+            #temporarily test whether probs are logged
+            elif(len(result_to_write[str(qid)]['0']['0']==2)):
+                  varying_context_result = {}
             else:
                   # varying_context_result = result_to_write[str(qid)] #added 0824
                   # existing_starts = list(varying_context_result.keys()) #added 0824
