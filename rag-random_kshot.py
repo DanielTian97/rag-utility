@@ -71,7 +71,7 @@ if __name__=="__main__":
                   varying_context_result = {} #{start: results}
                   # existing_starts = []
             #temporarily test whether probs are logged
-            elif(len(result_to_write[str(qid)]['0']['0']==2)):
+            elif(len(result_to_write[str(qid)]['0']['0'])==2):
                   varying_context_result = {}
             else:
                   # varying_context_result = result_to_write[str(qid)] #added 0824
