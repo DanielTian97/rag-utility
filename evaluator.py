@@ -89,6 +89,7 @@ if __name__=="__main__":
     parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small'])
     parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'oracle', 'reverse_oracle'])
     parser.add_argument("--suffix", type=str, default='', choices=['', '_p'])
+    parser.add_argument("--eval_method", type=str, default='bertscore', choices=['bertscore', 'exactmatch'])
     args = parser.parse_args()
 
     k = args.k
@@ -98,6 +99,7 @@ if __name__=="__main__":
     tails = args.tails
     dataset_name = args.dataset_name
     retriever_name = args.retriever
+    eval_method = args.eval_method
     if(k==0):
         tops, tails, retriever = 0, 0, 'bm25'
     suffix = args.suffix
@@ -108,7 +110,7 @@ if __name__=="__main__":
     eval_file_path = f'./eval_results/random_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}{suffix}_prompt1_eval.json'
 
     # experiment begins
-    bertscore = load("bertscore")
+    bertscore = load(eval_method)
     # prepare data
     qids, qrels, doc_dict = prepare_qids_qrels_docdict(dataset_name)
     
