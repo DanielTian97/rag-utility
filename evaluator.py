@@ -52,32 +52,58 @@ def evaluator(to_eval: str, docno_dict: dict, qrel_level: int):
     pred_text = to_eval
     predictions = len(doc_texts)*[pred_text]
     references = doc_texts
-    results = bertscore.compute(predictions=predictions, references=references, lang="en", model_type="bert-large-uncased", verbose=False)
+    results = answer_scorer.compute(predictions=predictions, references=references, lang="en", model_type="bert-large-uncased", verbose=False)
 
     precisions, recall, f1 = results['precision'], results['recall'], results['f1']
 
-    # print('precision', sum(precisions)/len(precisions), max(precisions))
-    # print('recall', sum(recall)/len(recall), max(recall))
-    # print('f1', sum(f1)/len(f1), max(f1))
     r = {\
         'precision': {'avg': sum(precisions)/len(precisions), 'max': max(precisions)},\
         'recall': {'avg': sum(recall)/len(recall), 'max': max(recall)},\
         'f1': {'avg': sum(f1)/len(f1), 'max': max(f1)},\
         }
     return r
-    
-def eval_by_qrels(to_eval: str, docno_dict):
-    # print(to_eval)
-    r2 = evaluator(to_eval, docno_dict, 2)
-    r3 = evaluator(to_eval, docno_dict, 3)
-    r = {'qrel_2': r2, 'qrel_3': r3}
-    return r
 
-def eval_by_qrels_1(to_eval: str, docno_dict):
-    # print(to_eval)
-    r1 = evaluator(to_eval, docno_dict, 1)
-    r = {'qrel_1': r1}
+# def direct_evaluator(to_eval: str, golden_answers: list):
+    
+#     if(len(golden_answers)==0):
+#         r = {\
+#             'precision': {'avg': -1, 'max': -1},\
+#             'recall': {'avg': -1, 'max': -1},\
+#             'f1': {'avg': -1, 'max': -1},\
+#             }
+#         return r
+
+#     pred_text = to_eval
+#     predictions = len(golden_answers)*[pred_text]
+#     results = answer_scorer.compute(predictions=predictions, references=golden_answers, lang="en", model_type="bert-large-uncased", verbose=False)
+
+#     precisions, recall, f1 = results['precision'], results['recall'], results['f1']
+
+#     r = {\
+#         'precision': {'avg': sum(precisions)/len(precisions), 'max': max(precisions)},\
+#         'recall': {'avg': sum(recall)/len(recall), 'max': max(recall)},\
+#         'f1': {'avg': sum(f1)/len(f1), 'max': max(f1)},\
+#         }
+#     return r
+
+def eval_by_qrels(to_eval: str, docno_dict, qrel_levels=[2, 3]):
+    r = {}
+    for level in qrel_levels:
+        r.update({f'qrel_{level}': evaluator(to_eval, docno_dict, level)})
     return r
+    
+# def eval_by_qrels(to_eval: str, docno_dict):
+#     # print(to_eval)
+#     r2 = evaluator(to_eval, docno_dict, 2)
+#     r3 = evaluator(to_eval, docno_dict, 3)
+#     r = {'qrel_2': r2, 'qrel_3': r3}
+#     return r
+
+# def eval_by_qrels_1(to_eval: str, docno_dict):
+#     # print(to_eval)
+#     r1 = evaluator(to_eval, docno_dict, 1)
+#     r = {'qrel_1': r1}
+#     return r
 
 if __name__=="__main__":
     
@@ -89,7 +115,7 @@ if __name__=="__main__":
     parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small'])
     parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'oracle', 'reverse_oracle'])
     parser.add_argument("--suffix", type=str, default='', choices=['', '_p'])
-    parser.add_argument("--eval_method", type=str, default='bertscore', choices=['bertscore', 'exactmatch'])
+    parser.add_argument("--eval_method", type=str, default='bertscore', choices=['bertscore', 'exact_match'])
     args = parser.parse_args()
 
     k = args.k
@@ -110,9 +136,12 @@ if __name__=="__main__":
     eval_file_path = f'./eval_results/random_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}{suffix}_prompt1_eval.json'
 
     # experiment begins
-    bertscore = load(eval_method)
+    answer_scorer = load(eval_method)
     # prepare data
-    qids, qrels, doc_dict = prepare_qids_qrels_docdict(dataset_name)
+    if(eval_method == 'bertscore'):
+        qids, qrels, doc_dict = prepare_qids_qrels_docdict(dataset_name)
+    else:
+        print(f'This evaluation method is not currently supported, sorry.')
     
     # read the generated answers
     try:
@@ -148,9 +177,11 @@ if __name__=="__main__":
                 docno_dict = get_docnos(qid=qid, doc_dict=doc_dict, qrels=qrels)
 
                 if(dataset_name == 'dev_small'):
-                    r = eval_by_qrels_1(to_eval=to_eval, docno_dict=docno_dict)
-                else:
+                    r = eval_by_qrels(to_eval=to_eval, docno_dict=docno_dict, qrel_levels=[1])
+                elif(dataset_name in ['19', '20', '21', '22']):
                     r = eval_by_qrels(to_eval=to_eval, docno_dict=docno_dict)
+                else:
+                    print('This dataset doesn\'t have a qrel file')
 
                 eval_result_start.update({i: r})
             eval_result_qid.update({start: eval_result_start})

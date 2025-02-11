@@ -8,6 +8,7 @@ if __name__=="__main__":
       parser.add_argument("--num_calls", type=int, default=5)
       parser.add_argument("--temperature", type=float, default=0.3)
       parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test'])
+      parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
       args = parser.parse_args()
 
       k = 0
@@ -19,20 +20,23 @@ if __name__=="__main__":
       temperature = args.temperature
       dataset_name = args.dataset_name
       retriever_name = 'bm25'
+      long_answer = True if args.long_answer=='True' else False
       
       # load the llm
       llm = llama_tools.load_llama()
       # load needed data
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name)
       
-      setting_file_name = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
+      short_answer_identifier = 'random' if long_answer else 'short'
+      
+      setting_file_name = f'./gen_results/{short_answer_identifier}_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
       setting_record = {'k':k, 'step':step, 'num_calls':num_calls, \
                   'tops':tops, 'tails':tails, 'temperature':temperature}
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./gen_results/random_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'
+      file_name = f'./gen_results/{short_answer_identifier}_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
@@ -57,19 +61,14 @@ if __name__=="__main__":
             
             if(str(qid) not in existed_qids_list):
                   varying_context_result = {} #{start: results}
-                  # existing_starts = []
             else:
-                  # varying_context_result = result_to_write[str(qid)] #added 0824
-                  # existing_starts = list(varying_context_result.keys()) #added 0824
                   continue
 
             zeroshot_result = {} #{start: results}
 
-            # start_records, context_book = compose_context(qid=qid, res=res, k=k, step=step, tops=tops, tails=tails, doc_dict=doc_dict)
-            # for start, context in zip(start_records, context_book):
             llm.set_seed(1000) # added 0824
 
-            prompt = prompt_tools.prompt_assembler_0(query)
+            prompt = prompt_tools.prompt_assembler_0(query, long_answer)
             print(prompt)
             multi_call_results = {}
             for j in range(num_calls):

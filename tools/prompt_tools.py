@@ -1,10 +1,16 @@
 from tools.permutation_generator import *
 
-def used_preamble(): # for k-shot
-    return "You are an expert at answering questions based on your own knowledge and related context. Please answer this question based on the given context. End your answer with STOP."
-
-def used_preamble_0(): # for 0-shot
-    return "You are an expert at answering questions based on your own knowledge. Please answer this question. End your answer with STOP."
+def used_preamble(long_answer=True): # for k-shot
+    if(long_answer):
+        return "You are an expert at answering questions based on your own knowledge and related context. Please answer this question based on the given context. End your answer with STOP."
+    else:
+        return "You are an expert at answering questions based on your own knowledge and related context. Please answer this question based on the given context. The answer must be a short entity. End your answer with STOP."
+        
+def used_preamble_0(long_answer=True): # for 0-shot
+    if(long_answer):
+        return "You are an expert at answering questions based on your own knowledge. Please answer this question. End your answer with STOP."
+    else:
+        return "You are an expert at answering questions based on your own knowledge. Please answer this question. The answer must be a short entity. End your answer with STOP."
 
 # prepare needed files
 def prepare_data(dataset_name: str, retriever_name = 'bm25'):
@@ -106,10 +112,10 @@ def compose_context_with_permutations(res, qid: str, k, step, tops, tails, doc_d
             
     return p_name_list, context_book
 
-def prompt_assembler_0(query:str):
-    preamble = used_preamble_0()
+def prompt_assembler_0(query:str, long_answer=True):
+    preamble = used_preamble_0(long_answer)
     return f'{preamble} \nQuestion: "{query}"\nNow start your answer. \nAnswer: '
 
-def prompt_assembler(context:str, query:str):
-    preamble = used_preamble()
+def prompt_assembler(context:str, query:str, long_answer=True):
+    preamble = used_preamble(long_answer)
     return f'{preamble} \n{context}Question: "{query}"\nNow start your answer. \nAnswer: '
