@@ -32,7 +32,7 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
     queries = pd.read_csv(f'./queries/queries_{dataset_name}.csv')
     # prepare res file
 
-    if(dataset_name=='dev_small'):
+    if((dataset_name=='dev_small')|(dataset_name=='nq_test')):
         res = pd.read_csv(f'./res/{retriever_name}_{dataset_name}.csv') # retrieval result
     else:
         res = pd.read_csv(f'./res/{retriever_name}_dl_{dataset_name}.csv') # retrieval result
