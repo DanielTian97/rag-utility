@@ -19,7 +19,11 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
     elif((dataset_name=='21')|(dataset_name=='22')):
         with open('./doc_dicts/msmarco_passage_v2_dict.pkl', 'rb') as f:
             doc_dict = pickle.load(f)
-            f.close()   
+            f.close()
+    elif(dataset_name=='nq_test'):
+        with open('./doc_dicts/nq_wiki_dict.pkl', 'rb') as f:
+            doc_dict = pickle.load(f)
+            f.close()       
     else:
         print('this dataset is not supported')
         return
