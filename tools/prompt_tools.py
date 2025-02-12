@@ -4,13 +4,13 @@ def used_preamble(long_answer=True): # for k-shot
     if(long_answer):
         return "You are an expert at answering questions based on your own knowledge and related context. Please answer this question based on the given context. End your answer with STOP."
     else:
-        return "You are an expert at answering questions based on your own knowledge and related context. Please answer this question based on the given context in a short phrase. End your answer with STOP."
+        return "You are given a question and you MUST respond by generating the answer (max 5 tokens) based on your own knowledge and related context. End your answer with STOP."
         
 def used_preamble_0(long_answer=True): # for 0-shot
     if(long_answer):
         return "You are an expert at answering questions based on your own knowledge. Please answer this question. End your answer with STOP."
     else:
-        return "You are an expert at answering questions based on your own knowledge. Please answer this question. The answer should be as concise as possible. The answer should be a short phrase instead of a completed sentence. End your answer with STOP."
+        return "You are given a question and you MUST respond by generating the answer (max 5 tokens) based on your own knowledge. End your answer with STOP."
 
 # prepare needed files
 def prepare_data(dataset_name: str, retriever_name = 'bm25'):

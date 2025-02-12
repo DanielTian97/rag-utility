@@ -1,6 +1,7 @@
 from tools import llama_tools, experiment_tools, prompt_tools
 import json
 import argparse
+import datetime
 
 if __name__=="__main__":
       
@@ -13,6 +14,7 @@ if __name__=="__main__":
       parser.add_argument("--temperature", type=float, default=0.3)
       parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test'])
       parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct','oracle', 'reverse_oracle'])
+      parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
       args = parser.parse_args()
 
       signed_k = args.k
@@ -24,6 +26,8 @@ if __name__=="__main__":
       temperature = args.temperature
       dataset_name = args.dataset_name
       retriever_name = args.retriever
+      long_answer = True if args.long_answer=='True' else False
+      short_answer_identifier = 'random' if long_answer else 'short'
       
       k = signed_k
       reverse_order = k<0
@@ -35,14 +39,15 @@ if __name__=="__main__":
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name, retriever_name)
       queries.qid = queries.qid.astype('str')
       
-      setting_file_name = f'./gen_results/random_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
-      setting_record = {'k':signed_k, 'step':step, 'num_calls':num_calls, \
-                  'tops':tops, 'tails':tails, 'temperature':temperature}
+      setting_file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
+      setting_record = {'k': k, 'reverse_order': reverse_order, 'num_calls': num_calls, 'step': step, 'tops': tops, 'tails': tails, 
+            'temperature': temperature, 'query_set': dataset_name, 'retriever': retriever_name, 'long_answer?': long_answer}
+      setting_record.update({'--experiment_start_at': str(datetime.datetime.now())})
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
 
-      file_name = f'./gen_results/random_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'
+      file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
@@ -69,24 +74,16 @@ if __name__=="__main__":
             
             if(str(qid) not in existed_qids_list):
                   varying_context_result = {} #{start: results}
-                  # existing_starts = []
-            #temporarily test whether probs are logged
             elif(len(result_to_write[str(qid)]['0']['0'])==2):
                   varying_context_result = {}
             else:
-                  # varying_context_result = result_to_write[str(qid)] #added 0824
-                  # existing_starts = list(varying_context_result.keys()) #added 0824
                   continue
-                  # print(f'q_number={q_no}--{qid}')
-                  # print(existing_starts)
 
             start_records, context_book = prompt_tools.compose_context(qid=qid, res=res, k=k, step=step, tops=tops, tails=tails, doc_dict=doc_dict, reverse_order=reverse_order)
             for start, context in zip(start_records, context_book):
                   llm.set_seed(1000) # added 0824
-                  # if(str(start) in existing_starts):
-                  #       continue
                   print(f'\tstart_rank.{start}')
-                  prompt = prompt_tools.prompt_assembler(context, query)
+                  prompt = prompt_tools.prompt_assembler(context, query, long_answer)
                   print(prompt)
                   multi_call_results = {}
                   for j in range(num_calls):

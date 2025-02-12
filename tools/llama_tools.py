@@ -1,8 +1,10 @@
-def llama_call(llm, prompt, temperature):
+def llama_call(llm, prompt, temperature, short_answer=False):
+    
+      token_limit = 5 if short_answer else 300
       
       output = llm(
                   prompt, # Prompt
-                  max_tokens=300, # Generate up to 300 tokens, set to None to generate up to the end of the context window
+                  max_tokens=token_limit, # Generate up to 300 tokens, set to None to generate up to the end of the context window
                   stop=["STOP"], # Stop generating just before the model would generate a new question
                   echo=False, # Echo the prompt back in the output
                   logprobs=50,
@@ -31,8 +33,8 @@ def load_llama():
     llm.set_seed(1000)
     return llm
   
-def single_call(llm, prompt, temperature):
-    output = llama_call(llm, prompt, temperature)
+def single_call(llm, prompt, temperature, short_answer=False):
+    output = llama_call(llm, prompt, temperature, short_answer)
                   
     # logprob_dict = output['choices'][0]['logprobs']['top_logprobs']
     token_logprobs = output['choices'][0]['logprobs']['token_logprobs']

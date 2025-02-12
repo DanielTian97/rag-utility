@@ -1,6 +1,7 @@
 from tools import llama_tools, prompt_tools, experiment_tools
 import json
 import argparse
+import datetime
 
 if __name__=="__main__":
       
@@ -21,17 +22,17 @@ if __name__=="__main__":
       dataset_name = args.dataset_name
       retriever_name = 'bm25'
       long_answer = True if args.long_answer=='True' else False
+      short_answer_identifier = 'random' if long_answer else 'short'
       
       # load the llm
       llm = llama_tools.load_llama()
       # load needed data
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name)
       
-      short_answer_identifier = 'random' if long_answer else 'short'
-      
       setting_file_name = f'./gen_results/{short_answer_identifier}_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
-      setting_record = {'k':k, 'step':step, 'num_calls':num_calls, \
-                  'tops':tops, 'tails':tails, 'temperature':temperature}
+      setting_record = {'k': k, 'num_calls': num_calls, 'step': step, 'tops': tops, 'tails': tails, 
+            'temperature': temperature, 'query_set': dataset_name, 'retriever': retriever_name, 'long_answer?': long_answer}
+      setting_record.update({'--experiment_start_at': str(datetime.datetime.now())})
       f = open(setting_file_name, "w+", encoding='UTF-8')
       json.dump(setting_record, f, indent=4)
       f.close()
