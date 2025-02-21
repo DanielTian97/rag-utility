@@ -1,4 +1,4 @@
-# An Experiment Framework for Evaluating the Effect of Varying Contexts on the RAG Performances in Downstream Tasks
+# RAG Analysis Tool
 
 :writing_hand: This project was originally built to investigate how relevance is transmitted from the retriever to the generator. The first-stage outcomes and analysis of the correlation between conventional IR metrics and utility (relative gain in RAG performance) have been reported in our full paper _'Is Relevance Propagated from Retriever to
 Generator in RAG?'_, which has been accepted by ECIR 2025. Currently, this paper can be accessed via .... on arXiv.
