@@ -74,8 +74,8 @@ if __name__=="__main__":
             
             if(str(qid) not in existed_qids_list):
                   varying_context_result = {} #{start: results}
-            elif(len(result_to_write[str(qid)]['0']['0'])==2):
-                  varying_context_result = {}
+            # elif(len(result_to_write[str(qid)]['0']['0'])==2):
+            #       varying_context_result = {}
             else:
                   continue
 
