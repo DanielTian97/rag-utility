@@ -39,15 +39,18 @@ if __name__=="__main__":
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name, retriever_name)
       queries.qid = queries.qid.astype('str')
       
-      setting_file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
-      setting_record = {'k': k, 'reverse_order': reverse_order, 'num_calls': num_calls, 'step': step, 'tops': tops, 'tails': tails, 
-            'temperature': temperature, 'query_set': dataset_name, 'retriever': retriever_name, 'long_answer?': long_answer}
-      setting_record.update({'--experiment_start_at': str(datetime.datetime.now())})
-      f = open(setting_file_name, "w+", encoding='UTF-8')
-      json.dump(setting_record, f, indent=4)
-      f.close()
+      # setting_file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
+      # setting_record = {'k': k, 'reverse_order': reverse_order, 'num_calls': num_calls, 'step': step, 'tops': tops, 'tails': tails, 
+      #       'temperature': temperature, 'query_set': dataset_name, 'retriever': retriever_name, 'long_answer?': long_answer}
+      # setting_record.update({'--experiment_start_at': str(datetime.datetime.now())})
+      # f = open(setting_file_name, "w+", encoding='UTF-8')
+      # json.dump(setting_record, f, indent=4)
+      # f.close()
 
-      file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'
+      if(long_answer):
+          file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'
+      else:
+          file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_concise.json' #0513
       # result_to_write = {} #{qid:result_for_qid}
 
       try:
@@ -88,7 +91,7 @@ if __name__=="__main__":
                   multi_call_results = {}
                   for j in range(num_calls):
                         print(f'\t\tno.{j}')
-                        result = llama_tools.single_call(llm=llm, prompt=prompt, temperature=temperature)
+                        result = llama_tools.single_call(llm=llm, prompt=prompt, temperature=temperature, long_answer=long_answer)
                         multi_call_results.update({j: result})
                   varying_context_result.update({start: multi_call_results})
                         
