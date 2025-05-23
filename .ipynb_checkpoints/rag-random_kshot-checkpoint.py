@@ -13,7 +13,7 @@ if __name__=="__main__":
       parser.add_argument("--tails", type=int, default=0)
       parser.add_argument("--temperature", type=float, default=0.3)
       parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test'])
-      parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct','oracle', 'reverse_oracle'])
+      parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'e5', 'oracle', 'reverse_oracle'])
       parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
       args = parser.parse_args()
 
