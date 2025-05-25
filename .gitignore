@@ -5,3 +5,5 @@ random_answers*
 *msmarco_passage_dict.pkl
 *msmarco_passage_v2_dict.pkl
 *msmarco_passage_v2_dict_full.pkl
+*hotpotqa.csv
+*hotpotqa_wiki_dict.pkl
