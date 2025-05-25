@@ -12,7 +12,7 @@ if __name__=="__main__":
       parser.add_argument("--tops", type=int, default=1)
       parser.add_argument("--tails", type=int, default=0)
       parser.add_argument("--temperature", type=float, default=0.3)
-      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test'])
+      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test', 'hotpotqa_dev'])
       parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'e5', 'oracle', 'reverse_oracle'])
       parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
       args = parser.parse_args()
@@ -38,20 +38,11 @@ if __name__=="__main__":
       # load needed data
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name, retriever_name)
       queries.qid = queries.qid.astype('str')
-      
-      # setting_file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
-      # setting_record = {'k': k, 'reverse_order': reverse_order, 'num_calls': num_calls, 'step': step, 'tops': tops, 'tails': tails, 
-      #       'temperature': temperature, 'query_set': dataset_name, 'retriever': retriever_name, 'long_answer?': long_answer}
-      # setting_record.update({'--experiment_start_at': str(datetime.datetime.now())})
-      # f = open(setting_file_name, "w+", encoding='UTF-8')
-      # json.dump(setting_record, f, indent=4)
-      # f.close()
-
+    
       if(long_answer):
           file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'
       else:
           file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_concise.json' #0513
-      # result_to_write = {} #{qid:result_for_qid}
 
       try:
             f = open(file=file_name, mode="r")
