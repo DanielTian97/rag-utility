@@ -7,3 +7,4 @@ random_answers*
 *msmarco_passage_v2_dict_full.pkl
 *hotpotqa_dev.csv
 *hotpotqa_wiki_dict.pkl
+*.sh
