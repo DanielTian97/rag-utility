@@ -12,8 +12,8 @@ if __name__=="__main__":
       parser.add_argument("--tops", type=int, default=1)
       parser.add_argument("--tails", type=int, default=0)
       parser.add_argument("--temperature", type=float, default=0.3)
-      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test', 'hotpotqa_dev'])
-      parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'e5', 'oracle', 'reverse_oracle'])
+      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test', 'nq_dev', 'hotpotqa_dev', 'trag_0', 'trag_1', 'trag_2', 'trag_3', 'trag_4', 'trag_5'])
+      parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'e5', 'oracle', 'reverse_oracle', 'trag'])
       parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
       args = parser.parse_args()
 

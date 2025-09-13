@@ -27,14 +27,18 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
         with open('./doc_dicts/msmarco_passage_v2_dict.pkl', 'rb') as f:
             doc_dict = pickle.load(f)
             f.close()
-    elif(dataset_name=='nq_test'):
+    elif((dataset_name=='nq_test')|(dataset_name=='nq_dev')):
         with open('./doc_dicts/nq_wiki_dict.pkl', 'rb') as f:
             doc_dict = pickle.load(f)
             f.close()       
     elif(dataset_name=='hotpotqa_dev'):
         with open('./doc_dicts/hotpotqa_wiki_dict.pkl', 'rb') as f:
             doc_dict = pickle.load(f)
-            f.close()     
+            f.close()
+    elif(dataset_name[:4]=='trag'):
+        with open('./doc_dicts/trag_dict.pkl', 'rb') as f:
+            doc_dict = pickle.load(f)
+            f.close()        
     else:
         print('this dataset is not supported')
         return
@@ -43,8 +47,10 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
     queries = pd.read_csv(f'./queries/queries_{dataset_name}.csv')
     # prepare res file
 
-    if((dataset_name=='dev_small')|(dataset_name=='nq_test')|(dataset_name=='hotpotqa_dev')):
+    if((dataset_name=='dev_small')|(dataset_name=='nq_test')|(dataset_name=='nq_dev')|(dataset_name=='hotpotqa_dev')):
         res = pd.read_csv(f'./res/{retriever_name}_{dataset_name}.csv') # retrieval result
+    elif(dataset_name[:4]=='trag'):
+        res = pd.read_csv(f'./res/trag_25.csv')
     else:
         res = pd.read_csv(f'./res/{retriever_name}_dl_{dataset_name}.csv') # retrieval result
       

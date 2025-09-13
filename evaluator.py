@@ -34,7 +34,7 @@ def prepare_qids_goldanswers(dataset_name):
     queries = pd.read_csv(f'./queries/queries_{dataset_name}.csv')
     queries['qid'] = queries['qid'].astype('str')
     qids = queries.qid.tolist()
-    nq_gds = pd.read_csv('./golden_answers/gdas_nq_test.csv')
+    nq_gds = pd.read_csv(f'./golden_answers/gdas_{dataset_name}.csv')
 
     return qids, nq_gds
 
@@ -97,8 +97,8 @@ if __name__=="__main__":
     parser.add_argument("--num_calls", type=int, default=5)
     parser.add_argument("--tops", type=int, default=1)
     parser.add_argument("--tails", type=int, default=0)
-    parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test'])
-    parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'oracle', 'reverse_oracle'])
+    parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test', 'nq_dev'])
+    parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'e5', 'oracle', 'reverse_oracle'])
     parser.add_argument("--suffix", type=str, default='', choices=['', '_p'])
     # parser.add_argument("--eval_method", type=str, default='bertscore', choices=['bertscore', 'exact_match'])
     args = parser.parse_args()
@@ -110,7 +110,7 @@ if __name__=="__main__":
     tails = args.tails
     dataset_name = args.dataset_name
     retriever_name = args.retriever
-    if(dataset_name == 'nq_test'):
+    if(dataset_name in ['nq_test', 'nq_dev']):
         eval_method = 'em/f1'
     else:
         eval_method = 'bertscore'
@@ -120,7 +120,7 @@ if __name__=="__main__":
     if(suffix == '_p'):
         print('Now, the results of permutations are under evaluation!')
 
-    [name_start, name_end] = ['short', 'concise'] if dataset_name=='nq_test' else ['random', 'prompt1']
+    [name_start, name_end] = ['short', 'concise'] if (dataset_name in ['nq_test', 'nq_dev']) else ['random', 'prompt1']
     
     file_path = f'./gen_results/{name_start}_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}{suffix}_{name_end}.json'
     eval_file_path = f'./eval_results/{name_start}_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}{suffix}_{name_end}_eval.json'
@@ -169,13 +169,13 @@ if __name__=="__main__":
                 to_eval = answer_book[str(qid)][str(start)][str(i)]['answer']
                 
 
-                if(eval_method == 'dev_small'):
+                if(dataset_name == 'dev_small'):
                     docno_dict = get_docnos(qid=qid, doc_dict=doc_dict, qrels=qrels)
                     r = eval_by_qrels(to_eval=to_eval, docno_dict=docno_dict, qrel_levels=[1])
                 elif(dataset_name in ['19', '20', '21', '22']):
                     docno_dict = get_docnos(qid=qid, doc_dict=doc_dict, qrels=qrels)
                     r = eval_by_qrels(to_eval=to_eval, docno_dict=docno_dict)
-                elif(dataset_name == 'nq_test'):
+                elif(dataset_name in ['nq_test', 'nq_dev']):
                     gold_answers_qid = gold_answers[gold_answers.qid==qid].gold_answer.values
                     r = eval_by_goldanswers(to_eval=to_eval, refs=gold_answers_qid)
                 else:
