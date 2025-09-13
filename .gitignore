@@ -9,3 +9,4 @@ random_answers*
 *nq_dev.csv
 *hotpotqa_wiki_dict.pkl
 *.sh
+res/.ipynb_checkpoints/*
