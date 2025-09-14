@@ -15,6 +15,7 @@ if __name__=="__main__":
       parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test', 'nq_dev', 'hotpotqa_dev', 'trag_0', 'trag_1', 'trag_2', 'trag_3', 'trag_4', 'trag_5'])
       parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'e5', 'oracle', 'reverse_oracle', 'trag'])
       parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
+      parser.add_argument("--cuda_device", type=int, default=0)
       args = parser.parse_args()
 
       signed_k = args.k
@@ -28,13 +29,14 @@ if __name__=="__main__":
       retriever_name = args.retriever
       long_answer = True if args.long_answer=='True' else False
       short_answer_identifier = 'random' if long_answer else 'short'
+      cuda_device = args.cuda_device
       
       k = signed_k
       reverse_order = k<0
       k = abs(k)
-      
+
       # load the llm
-      llm = llama_tools.load_llama()
+      llm = llama_tools.load_llama(load_on_which_gpu=cuda_device)
       # load needed data
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name, retriever_name)
       queries.qid = queries.qid.astype('str')

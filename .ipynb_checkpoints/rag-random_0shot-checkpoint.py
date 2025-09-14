@@ -10,6 +10,7 @@ if __name__=="__main__":
       parser.add_argument("--temperature", type=float, default=0.3)
       parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test', 'nq_dev', 'hotpotqa_dev'])
       parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
+      parser.add_argument("--cuda_device", type=int, default=0)
       args = parser.parse_args()
 
       k = 0
@@ -23,19 +24,12 @@ if __name__=="__main__":
       retriever_name = 'bm25'
       long_answer = True if args.long_answer=='True' else False
       short_answer_identifier = 'random_answers' if long_answer else 'short_answers'
+      cuda_device = args.cuda_device
       
       # load the llm
-      llm = llama_tools.load_llama()
+      llm = llama_tools.load_llama(load_on_which_gpu=cuda_device)
       # load needed data
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name)
-      
-      # setting_file_name = f'./gen_results/{short_answer_identifier}_answers_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1_settings.json'
-      # setting_record = {'k': k, 'num_calls': num_calls, 'step': step, 'tops': tops, 'tails': tails, 
-      #       'temperature': temperature, 'query_set': dataset_name, 'retriever': retriever_name, 'long_answer?': long_answer}
-      # setting_record.update({'--experiment_start_at': str(datetime.datetime.now())})
-      # f = open(setting_file_name, "w+", encoding='UTF-8')
-      # json.dump(setting_record, f, indent=4)
-      # f.close()
 
       if(long_answer):
           file_name = f'./gen_results/{short_answer_identifier}_{k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'

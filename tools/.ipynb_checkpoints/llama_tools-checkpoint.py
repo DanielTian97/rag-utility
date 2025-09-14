@@ -16,20 +16,22 @@ def llama_call(llm, prompt, temperature, long_answer=True):
       
       return output
   
-def load_llama():
+def load_llama(model_path="../gguf_storage/Meta-Llama-3-8B-Instruct.Q8_0.gguf", load_on_which_gpu=0):
     
-    from llama_cpp import Llama
+    from llama_cpp import Llama, LLAMA_SPLIT_MODE_NONE
     import torch
     print(torch.__version__)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(device)
       
     llm = Llama(
-        model_path="../gguf_storage/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
+        model_path=model_path,
         logits_all=True,
         verbose=False,
         n_gpu_layers=-1, # Uncomment to use GPU acceleration
         n_ctx=4000, # temporarily change to 4000
+        main_gpu = load_on_which_gpu,
+        split_mode=LLAMA_SPLIT_MODE_NONE,
     )
 
     llm.set_seed(1000)
