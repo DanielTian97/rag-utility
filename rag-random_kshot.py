@@ -16,6 +16,7 @@ if __name__=="__main__":
       parser.add_argument("--retriever", type=str, default='bm25', choices=['bm25', 'mt5', 'tct', 'e5', 'oracle', 'reverse_oracle', 'trag'])
       parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
       parser.add_argument("--cuda_device", type=int, default=0)
+      parser.add_argument("--mode", type=str, default='local')
       args = parser.parse_args()
 
       signed_k = args.k
@@ -30,13 +31,19 @@ if __name__=="__main__":
       long_answer = True if args.long_answer=='True' else False
       short_answer_identifier = 'random' if long_answer else 'short'
       cuda_device = args.cuda_device
+      mode = args.mode
       
       k = signed_k
       reverse_order = k<0
       k = abs(k)
 
-      # load the llm
-      llm = llama_tools.load_llama(load_on_which_gpu=cuda_device)
+      # load the llm, server mode doesn't need loading, set to 0 for holding the place
+      if(mode=='local'):
+          llm = llama_tools.load_llama(load_on_which_gpu=cuda_device)
+          port = 8080 # place holder, not applicable in later code
+      else:
+          llm = 0
+          port = 8080 + 1*cuda_device
       # load needed data
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name, retriever_name)
       queries.qid = queries.qid.astype('str')
@@ -77,14 +84,14 @@ if __name__=="__main__":
 
             start_records, context_book = prompt_tools.compose_context(qid=qid, res=res, k=k, step=step, tops=tops, tails=tails, doc_dict=doc_dict, reverse_order=reverse_order)
             for start, context in zip(start_records, context_book):
-                  llm.set_seed(1000) # added 0824
+
                   print(f'\tstart_rank.{start}')
                   prompt = prompt_tools.prompt_assembler(context, query, long_answer)
                   print(prompt)
                   multi_call_results = {}
                   for j in range(num_calls):
                         print(f'\t\tno.{j}')
-                        result = llama_tools.single_call(llm=llm, prompt=prompt, temperature=temperature, long_answer=long_answer)
+                        result = llama_tools.single_call(llm=llm, prompt=prompt, temperature=temperature, long_answer=long_answer, mode=mode, port=port)
                         multi_call_results.update({j: result})
                   varying_context_result.update({start: multi_call_results})
                         

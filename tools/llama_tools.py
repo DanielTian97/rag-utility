@@ -1,6 +1,10 @@
+import requests
+import sseclient
+import json
+
 def llama_call(llm, prompt, temperature, long_answer=True):
     
-      # token_limit = 300 if long_answer else 5
+      llm.set_seed(1000)
       token_limit = 300
       stop_at = ["STOP"] if long_answer else ["</answer>"]
       
@@ -15,6 +19,31 @@ def llama_call(llm, prompt, temperature, long_answer=True):
             ) # Generate a completion, can also call create_completion
       
       return output
+
+def llm_client(prompt, temperature, long_answer=True, port=8080):
+
+    token_limit = 300
+    stop_at = ["STOP"] if long_answer else ["</answer>"]
+
+    url = f"http://localhost:{port}/v1/completions"
+    # print(port)
+    headers = {"Content-Type": "application/json"}
+    data = {
+        "model": "local",
+        "seed": 1000,
+        "prompt": prompt,
+        "max_tokens": token_limit,
+        "temperature": temperature,
+        "logprobs": 50,
+        "top_k": 50,
+        "stop": stop_at,
+    }
+    
+    resp = requests.post(url, headers=headers, json=data, stream=True)
+    client = sseclient.SSEClient(resp)
+    output = resp.json()
+      
+    return output
   
 def load_llama(model_path="../gguf_storage/Meta-Llama-3-8B-Instruct.Q8_0.gguf", load_on_which_gpu=0):
     
@@ -37,17 +66,23 @@ def load_llama(model_path="../gguf_storage/Meta-Llama-3-8B-Instruct.Q8_0.gguf", 
     llm.set_seed(1000)
     return llm
   
-def single_call(llm, prompt, temperature, long_answer=True):
-    output = llama_call(llm, prompt, temperature, long_answer)
-                  
-    # logprob_dict = output['choices'][0]['logprobs']['top_logprobs']
-    token_logprobs = output['choices'][0]['logprobs']['token_logprobs']
-    prob_seq = sum(token_logprobs)
-                  
-    answer = output['choices'][0]['text']
-                  
-    result = {"answer": answer, "prob_seq": float(prob_seq), "probs": str(token_logprobs)}
+def single_call(llm, prompt, temperature, long_answer=True, mode='local', port=8080):
+
+    if(mode=='local'):
+        output = llama_call(llm, prompt, temperature, long_answer)           
+        token_logprobs = output['choices'][0]['logprobs']['token_logprobs']   
+        
+    else: # mode=='server'
+        output = llm_client(prompt, temperature, long_answer, port)
+        try:
+            token_logprobs = [i['top_logprobs'][0]['logprob'] for i in output["choices"][0]['logprobs']['content']]
+        except:
+            token_logprobs = []
     
+    prob_seq = sum(token_logprobs)
+    answer = output["choices"][0]["text"]
+    result = {"answer": answer, "prob_seq": float(prob_seq), "probs": str(token_logprobs)}
+        
     return result
 
 def testtesttest():

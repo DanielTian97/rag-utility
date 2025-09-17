@@ -11,6 +11,7 @@ if __name__=="__main__":
       parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test', 'nq_dev', 'hotpotqa_dev'])
       parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
       parser.add_argument("--cuda_device", type=int, default=0)
+      parser.add_argument("--mode", type=str, default='local')
       args = parser.parse_args()
 
       k = 0
@@ -25,9 +26,15 @@ if __name__=="__main__":
       long_answer = True if args.long_answer=='True' else False
       short_answer_identifier = 'random_answers' if long_answer else 'short_answers'
       cuda_device = args.cuda_device
+      mode = args.mode
       
-      # load the llm
-      llm = llama_tools.load_llama(load_on_which_gpu=cuda_device)
+      # load the llm, server mode doesn't need loading, set to 0 for holding the place
+      if(mode=='local'):
+          llm = llama_tools.load_llama(load_on_which_gpu=cuda_device)
+          port = 8080 # place holder, not applicable in later code
+      else:
+          llm = 0
+          port = 8080+10*cuda_device
       # load needed data
       doc_dict, queries, res = prompt_tools.prepare_data(dataset_name)
 
@@ -64,14 +71,12 @@ if __name__=="__main__":
 
             zeroshot_result = {} #{start: results}
 
-            llm.set_seed(1000) # added 0824
-
             prompt = prompt_tools.prompt_assembler_0(query, long_answer)
             print(prompt)
             multi_call_results = {}
             for j in range(num_calls):
                   print(f'\t\tno.{j}')
-                  result = llama_tools.single_call(llm=llm, prompt=prompt, temperature=temperature, long_answer=long_answer)
+                  result = llama_tools.single_call(llm=llm, prompt=prompt, temperature=temperature, long_answer=long_answer, mode=mode, port=port)
                   multi_call_results.update({j: result})
             zeroshot_result.update({'0': multi_call_results})
                         
