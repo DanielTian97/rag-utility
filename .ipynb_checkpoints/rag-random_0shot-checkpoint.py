@@ -8,7 +8,7 @@ if __name__=="__main__":
       parser = argparse.ArgumentParser()
       parser.add_argument("--num_calls", type=int, default=5)
       parser.add_argument("--temperature", type=float, default=0.3)
-      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test', 'nq_dev', 'hotpotqa_dev'])
+      parser.add_argument("--dataset_name", type=str, choices=['19', '20', '21', '22', 'dev_small', 'nq_test', 'nq_dev', 'hotpotqa_dev', 'hotpotqa_train', 'trag_0', 'trag_1', 'trag_2', 'trag_3', 'trag_4', 'trag_5'])
       parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
       parser.add_argument("--cuda_device", type=int, default=0)
       parser.add_argument("--mode", type=str, default='local')
