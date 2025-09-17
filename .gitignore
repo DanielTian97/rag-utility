@@ -10,4 +10,5 @@ random_answers*
 *hotpotqa_wiki_dict.pkl
 *.sh
 res/.ipynb_checkpoints/*
+res/*hotpotqa_train.csv
 */trag*
