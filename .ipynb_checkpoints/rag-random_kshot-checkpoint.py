@@ -17,6 +17,7 @@ if __name__=="__main__":
       parser.add_argument("--long_answer", type=str, default='True', choices=['False', 'True'])
       parser.add_argument("--cuda_device", type=int, default=0)
       parser.add_argument("--mode", type=str, default='local')
+      parser.add_argument("--output_type", type=str, default='json')
       args = parser.parse_args()
 
       signed_k = args.k
@@ -31,6 +32,7 @@ if __name__=="__main__":
       long_answer = True if args.long_answer=='True' else False
       short_answer_identifier = 'random' if long_answer else 'short'
       cuda_device = args.cuda_device
+      output_type = args.output_type
       mode = args.mode
       
       k = signed_k
@@ -49,22 +51,24 @@ if __name__=="__main__":
       queries.qid = queries.qid.astype('str')
     
       if(long_answer):
-          file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.json'
+          file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_prompt1.{output_type}'
       else:
-          file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_concise.json' #0513
+          file_name = f'./gen_results/{short_answer_identifier}_answers_{signed_k}shot_{num_calls}calls_{tops}_{tails}_{retriever_name}_dl_{dataset_name}_concise.{output_type}' #0513 # compatiblity to jsonl, 0918
 
       try:
-            f = open(file=file_name, mode="r")
-            result_to_write = json.load(f)
-            existed_qids_list = list(result_to_write.keys())
-            print(existed_qids_list)
-            existed_qids = len(result_to_write)
-            f.close()
+          f = open(file=file_name, mode="r")
+          if(output_type=='json'):
+                result_to_write = json.load(f)
+                existed_qids_list = list(result_to_write.keys())
+                existed_qids = len(result_to_write)
+          elif(output_type=='jsonl'):
+                existed_qids_list, existed_qids = experiment_tools.read_exist_qids_from_jsonl(opened_file=f)
+          f.close()
       except:
             f = open(file=file_name, mode="w+")
-            result_to_write= {}
-            existed_qids_list = []
-            existed_qids = 0
+            if(output_type=='json'):
+                result_to_write= {}
+            existed_qids_list, existed_qids = [], 0
             f.close()
       
       print(existed_qids)
@@ -77,8 +81,6 @@ if __name__=="__main__":
             
             if(str(qid) not in existed_qids_list):
                   varying_context_result = {} #{start: results}
-            # elif(len(result_to_write[str(qid)]['0']['0'])==2):
-            #       varying_context_result = {}
             else:
                   continue
 
@@ -87,13 +89,17 @@ if __name__=="__main__":
 
                   print(f'\tstart_rank.{start}')
                   prompt = prompt_tools.prompt_assembler(context, query, long_answer)
-                  print(prompt)
+                  # print(prompt)
                   multi_call_results = {}
                   for j in range(num_calls):
                         print(f'\t\tno.{j}')
                         result = llama_tools.single_call(llm=llm, prompt=prompt, temperature=temperature, long_answer=long_answer, mode=mode, port=port)
                         multi_call_results.update({j: result})
                   varying_context_result.update({start: multi_call_results})
-                        
-            result_to_write.update({qid: varying_context_result})              
-            experiment_tools.update_json_result_file(file_name=file_name, result_to_write=result_to_write)
+
+            if(output_type=='json'):
+                result_to_write.update({qid: varying_context_result})              
+                experiment_tools.update_json_result_file(file_name=file_name, result_to_write=result_to_write)
+            elif(output_type=='jsonl'):
+                # for writing jsonl
+                experiment_tools.update_jsonl_result_file(file_name=file_name, qid=qid, varying_context_result=varying_context_result)
